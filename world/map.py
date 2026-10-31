@@ -1,7 +1,18 @@
+import random
+
+class Room:
+    def __init__(self,x,y,width,height):
+        self.x=x
+        self.y=y
+        self.width=width
+        self.height=height
+
+
 class Gamemap:
     def __init__(self,width,height):
         self.width=width
         self.height=height
+        self.rooms=[]
         self.tiles= [[" " for _ in range(width)] for _ in range(height)]
 
     def set_tile(self,x,y,tile):
@@ -40,6 +51,7 @@ class Gamemap:
         self.set_tile(x,y+height-1,'+')
         self.set_tile(x+width-1,y,"+")
         self.set_tile(x+width-1,y+height-1,"+")
+        self.rooms.append(Room(x,y,width,height))
                     
 
     """           
@@ -78,6 +90,18 @@ class Gamemap:
         else:
             self.create_room(x,y,3,length)
         
+    def create_entrance(self,x,y):
+        self.set_tile(x,y," ")
+        
+    def generate_map(self,max_rooms,min_size,max_size):
+        for _ in range(max_rooms):
+            width = random.randint(min_size,max_size)
+            height = random.randint(min_size,max_size)
+            
+            x=random.randint(1,self.width-width-1)
+            y=random.randint(1,self.height-height-1)
+            
+            n_room=self.create_room(x,y,width,height)
         
         
             
