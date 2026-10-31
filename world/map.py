@@ -14,19 +14,59 @@ class Gamemap:
         return None
 
     def create_room(self,x,y,width,height):
-        for i in range(y,y+height):
+    
+    
+        for row in range(y,y+height):
 
-            for j in range(x,x+width):
-                if (i ==y or i==y+height-1) or (j==x or j==x+width-1):
-                   self.set_tile(j,i,"#")
+            for col in range(x,x+width):
                 
+                self.set_tile(col,row,".") 
+                    
+                self.set_tile(x,row,'|')
+                self.set_tile(x+width-1,row,'|')
+                self.set_tile(col,y,'-')
+                self.set_tile(col,y+height-1,'-')
+                    
+                self.set_tile(x,y,"+")
+        
+        self.set_tile(x,y,"+")
+        self.set_tile(x,y+height-1,'+')
+        self.set_tile(x+width-1,y,"+")
+        self.set_tile(x+width-1,y+height-1,"+")
+                    
+
+            
+    def create_room(self,x,y,width,height):
+    
+    
+        for row in range(y,y+height):
+
+            for col in range(x,x+width):
                 
+                if (col==x)or (col==x+width-1):
+                    self.set_tile(x,row,"|")
+                    self.set_tile(x+width-1,row,"|")
+               
                 else:
-                    self.set_tile(j,i,".") 
+                    self.set_tile(col,row,".") 
+                    
+                self.set_tile(x,row,'|')
+                self.set_tile(x+width-1,row,'|')
+                self.set_tile(col,y,'-')
+                self.set_tile(col,y+height-1,'-')
+                    
+                self.set_tile(x,y,"+")
+        
+        self.set_tile(x,y,"+")
+        self.set_tile(x,y+height-1,'+')
+        self.set_tile(x+width-1,y,"+")
+        self.set_tile(x+width-1,y+height-1,"+")
+                    
 
-            if (i==y or i==y+height-1):
-                self.set_tile(x,i,"+")
-                self.set_tile(x+width-1,i,"+")
+            
+
+
+
 
     def display(self):
         for i in self.tiles:
