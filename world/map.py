@@ -14,10 +14,17 @@ class Gamemap:
         return None
 
     def create_room(self,x,y,width,height):
+        
+        if x <0 or y<0 or width<3 or height<3:
+            print("Room too small")
+            return
+        
+        if x+width> self.width or y+height>self.height:
+            print("Room is outside the map, make the room smaller")
+            return
     
     
         for row in range(y,y+height):
-
             for col in range(x,x+width):
                 
                 self.set_tile(col,row,".") 
@@ -35,7 +42,8 @@ class Gamemap:
         self.set_tile(x+width-1,y+height-1,"+")
                     
 
-            
+    """           
+    FAILED ver
     def create_room(self,x,y,width,height):
     
     
@@ -62,17 +70,24 @@ class Gamemap:
         self.set_tile(x+width-1,y,"+")
         self.set_tile(x+width-1,y+height-1,"+")
                     
-
+    """
+    
+    def create_corridor(self,x,y,length,horizontal=True):
+        if horizontal==True:
+            self.create_room(x,y,length,3)
+        else:
+            self.create_room(x,y,3,length)
+        
+        
+        
             
-
-
-
-
     def display(self):
         for i in self.tiles:
             print("".join(i))
 
 if __name__=="__main__":
-    game_map=Gamemap(20,10)
+    game_map=Gamemap(50,50)
     game_map.create_room(2,2,5,4)
+    game_map.create_corridor(9,4,5,horizontal=True)
+    game_map.create_corridor(10,6,7,horizontal=False)
     game_map.display()
