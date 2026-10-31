@@ -6,6 +6,19 @@ class Room:
         self.y=y
         self.width=width
         self.height=height
+        
+    def intersects(self,other):
+        return (
+            self.x < other.x +other.width and
+            self.x + self.width >other.x and
+            self.y < other.y + other.height and
+            self.y + self.height > other.y
+        )
+        
+    def center(self):
+        cx=self.x+self.width//2
+        cy=self.y+self.width//2
+        return cx,cy
 
 
 class Gamemap:
@@ -101,8 +114,31 @@ class Gamemap:
             x=random.randint(1,self.width-width-1)
             y=random.randint(1,self.height-height-1)
             
-            n_room=self.create_room(x,y,width,height)
+            n_room=Room(x,y,width,height) 
+            ovrlap=False
+            
+            for room in self.rooms():
+                if n_room.intersects(room):
+                    ovrlap=True
+                    break
+                
+            if not ovrlap:
+                self.create_room(x,y,width,height)
+    
+    def connect_rooms(self,room1,room2):
+        x1,y1=self.center(room1)
+        x2,y2=self.center(room2)
         
+        for x in range(min(x1,x2),max(x1,x2)+1):
+            self.set_tile(x,y1,'.')
+        
+        for y in range(min(y1,y2),max(y1,y2)+1):
+            self.set_tile(x2,y,'.')
+    
+    def connect_all_rooms(self):
+        for i in range(len(self.rooms)-1):
+            self.connect_rooms(self.rooms[i-1],self.rooms[i])
+            
         
             
     def display(self):
