@@ -111,24 +111,43 @@ class Gamemap:
                     
     """
     
-    def create_corridor(self,x1,x2,y1,y2,Validation_status):
+    def create_corridor(self,x1,x2,y1,y2):
         for x in range(min(x1,x2),max(x1,x2)+1):
-            if (self.colors[y1][x]) not in (YELLOW,RED) and (self.colors[y1+1][x]) not in (YELLOW,RED) and (self.colors[y1-1][x]) not in (YELLOW,RED):
-                if Validation_status==True:
-                    self.set_tile(x,y1,".",CYAN)
-                    self.set_tile(x,y1-1,'-',GREEN)
-                    self.set_tile(x,y1+1,'-',GREEN)
-                else:
-                    self.set_tile(x,y1,".",CYAN)
+            # if (self.colors[y1][x]) not in (YELLOW,RED) and (self.colors[y1+1][x]) not in (YELLOW,RED) and (self.colors[y1-1][x]) not in (YELLOW,RED):
+                self.set_tile(x,y1,".",CYAN)
+                #self.set_tile(x,y1-1,'-',GREEN)
+                #self.set_tile(x,y1+1,'-',GREEN)
         
         for y in range(min(y1,y2),max(y1,y2)+1):
-            if (self.colors[y][x2]) not in (YELLOW,RED) and (self.colors[y][x2+1]) not in (YELLOW,RED) and (self.colors[y][x2-1]) not in (YELLOW,RED):
-                if Validation_status==True:
-                    self.set_tile(x2,y,'.',CYAN)
+            # if (self.colors[y][x2]) not in (YELLOW,RED) and (self.colors[y][x2+1]) not in (YELLOW,RED) and (self.colors[y][x2-1]) not in (YELLOW,RED):
+                self.set_tile(x2,y,'.',CYAN)
+                #self.set_tile(x2-1,y,'|',GREEN)
+                #self.set_tile(x2+1,y,'|',GREEN)
+        
+        self.create_corridor_walls(x1,x2,y1,y2)
+    
+    def is_protected_tile(self,x,y):
+        if x<0 or x>=self.width or y<0 or y>=self.height:
+            return True
+            
+        if (self.colors[y][x]) not in (YELLOW,RED,CYAN):
+            return False
+        else:
+            return True
+
+    def create_corridor_walls(self,x1,x2,y1,y2):
+        for x in range(min(x1,x2),max(x1,x2)+1):
+            if self.is_protected_tile(x,y1-1)==False:
+                    self.set_tile(x,y1-1,'-',GREEN)
+            if self.is_protected_tile(x,y1+1)==False:
+                self.set_tile(x,y1+1,'-',GREEN) 
+        for y in range(min(y1,y2),max(y1,y2)+1):
+            if self.is_protected_tile(x2-1,y)==False:
                     self.set_tile(x2-1,y,'|',GREEN)
-                    self.set_tile(x2+1,y,'|',GREEN)
-                else:
-                    self.set_tile(x2,y,".",CYAN)
+            if self.is_protected_tile(x2+1,y)==False:
+                self.set_tile(x2+1,y,'|',GREEN)
+            
+            
         
     def create_entrance(self,x,y):
         self.set_tile(x,y," ")
@@ -153,26 +172,23 @@ class Gamemap:
             if not ovrlap:
                 self.create_room(x,y,width,height)
                     
-    def connect_rooms(self,room1,room2,Validate):
+    def connect_rooms(self,room1,room2):
         x1,y1=room1.center()
         x2,y2=room2.center()
-        print("room1 - ",x1,y1)
-        print("room2 - ",x2,y2)
-        
-        self.create_corridor(x1,x2,y1,y2,Validate)
+        self.create_corridor(x1,x2,y1,y2)
             
 
-    def connect_all_rooms(self,Validate=False):
+    def connect_all_rooms(self):
         for i in range(1,len(self.rooms)):
-            print(self.rooms[i-1].center())
-            print(self.rooms[i].center())
-            self.connect_rooms(self.rooms[i-1],self.rooms[i],Validate)
+            self.connect_rooms(self.rooms[i-1],self.rooms[i])
             
     
     def is_walkable(self,x,y):
         return self.get_tile(x,y)=="."
             
     def validate(self):
+        if not self.rooms:
+            return False
         checked=[[False for _ in range(self.width)]for _ in range(self.height)]
         start_x,start_y = self.rooms[0].center()
         queue = [(start_x,start_y)]
@@ -198,7 +214,12 @@ class Gamemap:
                 return False
                 
         return True
-     
+
+                     
+        
+            
+        
+            
     def display(self):
         for y in range(self.height):
             for x in range(self.width):
@@ -219,6 +240,4 @@ if __name__=="__main__":
     game_map.generate_rooms(10, 5, 10)
     game_map.connect_all_rooms()
     print(game_map.validate())
-    Validation_status=game_map.validate()
-    game_map.connect_all_rooms(True)
     game_map.display()
