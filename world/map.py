@@ -8,11 +8,13 @@ class Room:
         self.height=height
         
     def intersects(self,other):
+        padding = 2
         return (
-            self.x < other.x +other.width and
-            self.x + self.width >other.x and
-            self.y < other.y + other.height and
-            self.y + self.height > other.y
+            
+            self.x - padding < other.x +other.width and
+            self.x + self.width + padding >other.x and
+            self.y - padding < other.y + other.height and
+            self.y + self.height + padding > other.y
         )
         
     def center(self):
