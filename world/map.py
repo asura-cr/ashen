@@ -115,14 +115,14 @@ class Gamemap:
         for x in range(min(x1,x2),max(x1,x2)+1):
             # if (self.colors[y1][x]) not in (YELLOW,RED) and (self.colors[y1+1][x]) not in (YELLOW,RED) and (self.colors[y1-1][x]) not in (YELLOW,RED):
                 self.set_tile(x,y1,".",CYAN)
-                self.set_tile(x,y1-1,'-',GREEN)
-                self.set_tile(x,y1+1,'-',GREEN)
+                #self.set_tile(x,y1-1,'-',GREEN)
+                #self.set_tile(x,y1+1,'-',GREEN)
         
         for y in range(min(y1,y2),max(y1,y2)+1):
             # if (self.colors[y][x2]) not in (YELLOW,RED) and (self.colors[y][x2+1]) not in (YELLOW,RED) and (self.colors[y][x2-1]) not in (YELLOW,RED):
                 self.set_tile(x2,y,'.',CYAN)
-                self.set_tile(x2-1,y,'|',GREEN)
-                self.set_tile(x2+1,y,'|',GREEN)
+                #self.set_tile(x2-1,y,'|',GREEN)
+                #self.set_tile(x2+1,y,'|',GREEN)
         
     def create_entrance(self,x,y):
         self.set_tile(x,y," ")
@@ -150,13 +150,18 @@ class Gamemap:
     def connect_rooms(self,room1,room2):
         x1,y1=room1.center()
         x2,y2=room2.center()
+        print("room1 - ",x1,y1)
+        print("room2 - ",x2,y2)
         
         self.create_corridor(x1,x2,y1,y2)
             
 
     def connect_all_rooms(self):
         for i in range(1,len(self.rooms)):
+            print(self.rooms[i-1].center())
+            print(self.rooms[i].center())
             self.connect_rooms(self.rooms[i-1],self.rooms[i])
+            
     
     def is_walkable(self,x,y):
         return self.get_tile(x,y)=="."
@@ -211,8 +216,6 @@ if __name__=="__main__":
     game_map = Gamemap(50, 50)
 
     game_map.generate_rooms(10, 5, 10)
-    print(game_map.rooms[i-1].center())
-    print(game_map.rooms[i].center())
     game_map.connect_all_rooms()
     print(game_map.validate())
     game_map.display()
