@@ -113,14 +113,16 @@ class Gamemap:
     
     def create_corridor(self,x1,x2,y1,y2):
         for x in range(min(x1,x2),max(x1,x2)+1):
-            self.set_tile(x,y1,".",CYAN)
-            self.set_tile(x,y1-2,'-',GREEN)
-            self.set_tile(x,y1+2,'-',GREEN)
+            if (self.colors[y1][x]) not in (YELLOW,RED) and (self.colors[y1+1][x]) not in (YELLOW,RED) and (self.colors[y1-1][x]) not in (YELLOW,RED):
+                self.set_tile(x,y1,".",CYAN)
+                self.set_tile(x,y1-1,'-',GREEN)
+                self.set_tile(x,y1+1,'-',GREEN)
         
         for y in range(min(y1,y2),max(y1,y2)+1):
-            self.set_tile(x2,y,'.',CYAN)
-            self.set_tile(x2-1,y,'|',GREEN)
-            self.set_tile(x2+1,y,'|',GREEN)
+            if (self.colors[y][x2]) not in (YELLOW,RED) and (self.colors[y][x2+1]) not in (YELLOW,RED) and (self.colors[y][x2-1]) not in (YELLOW,RED):
+                self.set_tile(x2,y,'.',CYAN)
+                self.set_tile(x2-1,y,'|',GREEN)
+                self.set_tile(x2+1,y,'|',GREEN)
         
     def create_entrance(self,x,y):
         self.set_tile(x,y," ")
