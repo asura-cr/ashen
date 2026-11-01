@@ -1,4 +1,6 @@
 import random
+from colorama import Fore,Style,init
+init()
 
 class Room:
     def __init__(self,x,y,width,height):
@@ -54,19 +56,19 @@ class Gamemap:
         for row in range(y,y+height):
             for col in range(x,x+width):
                 
-                self.set_tile(col,row,".") 
+                self.set_tile(col,row,Fore.YELLOW + "." + Fore.RESET) 
                     
-                self.set_tile(x,row,'|')
+                self.set_tile(x,row,Fore.RED + '|')
                 self.set_tile(x+width-1,row,'|')
                 self.set_tile(col,y,'-')
                 self.set_tile(col,y+height-1,'-')
                     
-                self.set_tile(x,y,"+")
+                self.set_tile(x,y,"+"+ Fore.RESET)
         
-        self.set_tile(x,y,"+")
+        self.set_tile(x,y,Fore.RED + "+")
         self.set_tile(x,y+height-1,'+')
         self.set_tile(x+width-1,y,"+")
-        self.set_tile(x+width-1,y+height-1,"+")
+        self.set_tile(x+width-1,y+height-1,"+" + Fore.RESET)
         self.rooms.append(Room(x,y,width,height))
                     
 
