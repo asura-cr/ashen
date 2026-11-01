@@ -111,22 +111,27 @@ class Gamemap:
                     
     """
     
+    def get_entrance(self,direction):
+        if direction=="right":
+            return self.x + self.width - 1,self.y + self.height//2
+        elif direction == "left":
+            return self.x, self.y + self.height//2
+        elif direction == "up":
+            return self.x + self.width//2 , self.y
+        elif direction == "down":
+            return self.x + self.width//2, self.y + self.height -1
+    
     def create_corridor(self,x1,x2,y1,y2):
         for x in range(min(x1,x2),max(x1,x2)+1):
-            if self.colors[y1][x] == RED:
-                self.set_tile(x-3,y1+3,'.',CYAN)
-            else:
-                self.set_tile(x,y1,".",CYAN)
+            self.set_tile(x,y1,".",CYAN)
                 #self.set_tile(x,y1-1,'-',GREEN)
                 #self.set_tile(x,y1+1,'-',GREEN)
         
         for y in range(min(y1,y2),max(y1,y2)+1):
-            if self.colors[y][x2] == RED:
-                self.set_tile(x2+3,y-3,'.',CYAN)
-            else:
-                self.set_tile(x2,y,'.',CYAN)
+            self.set_tile(x2,y,'.',CYAN)
                 #self.set_tile(x2-1,y,'|',GREEN)
                 #self.set_tile(x2+1,y,'|',GREEN)
+        #self.create_corridor_walls(x1,x2,y1,y2)
         
     
     def is_protected_tile(self,x,y):
