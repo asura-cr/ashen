@@ -17,8 +17,9 @@ class Room:
         
     def center(self):
         cx=self.x+self.width//2
-        cy=self.y+self.width//2
+        cy=self.y+self.height//2
         return cx,cy
+    
 
 
 class Gamemap:
@@ -97,16 +98,22 @@ class Gamemap:
                     
     """
     
-    def create_corridor(self,x,y,length,horizontal=True):
-        if horizontal==True:
-            self.create_room(x,y,length,3)
-        else:
-            self.create_room(x,y,3,length)
+    def create_corridor(self,x1,x2,y1,y2):
+        for x in range(min(x1,x2),max(x1,x2)+1):
+            self.set_tile(x,y1,".")
+            self.set_tile(x,y1-2,'-')
+            self.set_tile(x,y1+2,'-')
+        
+        for y in range(min(y1,y2),max(y1,y2)+1):
+            self.set_tile(x2,y,'.')
+            self.set_tile(x2-1,y,'|')
+            self.set_tile(x2+1,y,'|')
         
     def create_entrance(self,x,y):
         self.set_tile(x,y," ")
         
-    def generate_map(self,max_rooms,min_size,max_size):
+
+    def generate_rooms(self,max_rooms,min_size,max_size):
         for _ in range(max_rooms):
             width = random.randint(min_size,max_size)
             height = random.randint(min_size,max_size)
@@ -117,26 +124,23 @@ class Gamemap:
             n_room=Room(x,y,width,height) 
             ovrlap=False
             
-            for room in self.rooms():
+            for room in self.rooms:
                 if n_room.intersects(room):
                     ovrlap=True
                     break
                 
             if not ovrlap:
                 self.create_room(x,y,width,height)
-    
+                    
     def connect_rooms(self,room1,room2):
-        x1,y1=self.center(room1)
-        x2,y2=self.center(room2)
+        x1,y1=room1.center()
+        x2,y2=room2.center()
         
-        for x in range(min(x1,x2),max(x1,x2)+1):
-            self.set_tile(x,y1,'.')
-        
-        for y in range(min(y1,y2),max(y1,y2)+1):
-            self.set_tile(x2,y,'.')
-    
+        self.create_corridor(x1,x2,y1,y2)
+            
+
     def connect_all_rooms(self):
-        for i in range(len(self.rooms)-1):
+        for i in range(1,len(self.rooms)):
             self.connect_rooms(self.rooms[i-1],self.rooms[i])
             
         
@@ -146,8 +150,8 @@ class Gamemap:
             print("".join(i))
 
 if __name__=="__main__":
-    game_map=Gamemap(50,50)
-    game_map.create_room(2,2,5,4)
-    game_map.create_corridor(9,4,5,horizontal=True)
-    game_map.create_corridor(10,6,7,horizontal=False)
+    game_map = Gamemap(50, 50)
+
+    game_map.generate_rooms(10, 5, 10)
+    game_map.connect_all_rooms()
     game_map.display()
