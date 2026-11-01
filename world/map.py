@@ -2,6 +2,13 @@ import random
 from colorama import Fore,Style,init
 init()
 
+RESET=Fore.RESET
+RED=Fore.RED
+YELLOW=Fore.YELLOW
+BLACK=Fore.BLACK
+CYAN=Fore.CYAN
+GREEN=Fore.GREEN
+
 class Room:
     def __init__(self,x,y,width,height):
         self.x=x
@@ -32,10 +39,12 @@ class Gamemap:
         self.height=height
         self.rooms=[]
         self.tiles= [[" " for _ in range(width)] for _ in range(height)]
+        self.colors=[[None for _ in range(width)]for _ in range(height)]
 
-    def set_tile(self,x,y,tile):
+    def set_tile(self,x,y,tile,color=None):
         if 0 <=x<self.width and 0<=y<self.height:
             self.tiles[y][x]=tile
+            self.colors[y][x]=color
 
     def get_tile(self,x,y):
         if 0 <=x<self.width and 0<=y<self.height:
@@ -56,19 +65,19 @@ class Gamemap:
         for row in range(y,y+height):
             for col in range(x,x+width):
                 
-                self.set_tile(col,row,Fore.YELLOW + "." + Fore.RESET) 
+                self.set_tile(col,row,".",YELLOW) 
                     
-                self.set_tile(x,row,Fore.RED + '|')
-                self.set_tile(x+width-1,row,'|')
-                self.set_tile(col,y,'-')
-                self.set_tile(col,y+height-1,'-')
+                self.set_tile(x,row,'|',RED)
+                self.set_tile(x+width-1,row,'|',RED)
+                self.set_tile(col,y,'-',RED)
+                self.set_tile(col,y+height-1,'-',RED)
                     
-                self.set_tile(x,y,"+"+ Fore.RESET)
+                self.set_tile(x,y,"+",RED)
         
-        self.set_tile(x,y,Fore.RED + "+")
-        self.set_tile(x,y+height-1,'+')
-        self.set_tile(x+width-1,y,"+")
-        self.set_tile(x+width-1,y+height-1,"+" + Fore.RESET)
+        self.set_tile(x,y,"+",RED)
+        self.set_tile(x,y+height-1,'+',RED)
+        self.set_tile(x+width-1,y,"+",RED)
+        self.set_tile(x+width-1,y+height-1,"+",RED)
         self.rooms.append(Room(x,y,width,height))
                     
 
@@ -104,14 +113,14 @@ class Gamemap:
     
     def create_corridor(self,x1,x2,y1,y2):
         for x in range(min(x1,x2),max(x1,x2)+1):
-            self.set_tile(x,y1,".")
-            self.set_tile(x,y1-2,'-')
-            self.set_tile(x,y1+2,'-')
+            self.set_tile(x,y1,".",CYAN)
+            self.set_tile(x,y1-2,'-',GREEN)
+            self.set_tile(x,y1+2,'-',GREEN)
         
         for y in range(min(y1,y2),max(y1,y2)+1):
-            self.set_tile(x2,y,'.')
-            self.set_tile(x2-1,y,'|')
-            self.set_tile(x2+1,y,'|')
+            self.set_tile(x2,y,'.',CYAN)
+            self.set_tile(x2-1,y,'|',GREEN)
+            self.set_tile(x2+1,y,'|',GREEN)
         
     def create_entrance(self,x,y):
         self.set_tile(x,y," ")
@@ -150,8 +159,18 @@ class Gamemap:
         
             
     def display(self):
-        for i in self.tiles:
-            print("".join(i))
+        for y in range(self.height):
+            for x in range(self.width):
+                tile=self.tiles[y][x]
+                color = self.colors [y][x]
+                
+                if color:
+                    print(color+tile+RESET,end="")
+                else:
+                    print(tile,end="")
+            print()
+        
+            
 
 if __name__=="__main__":
     game_map = Gamemap(50, 50)
