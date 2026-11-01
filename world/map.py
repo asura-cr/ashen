@@ -113,13 +113,13 @@ class Gamemap:
     
     def create_corridor(self,x1,x2,y1,y2):
         for x in range(min(x1,x2),max(x1,x2)+1):
-            if (self.colors[y1][x]) not in (YELLOW,RED) and (self.colors[y1+1][x]) not in (YELLOW,RED) and (self.colors[y1-1][x]) not in (YELLOW,RED):
+            # if (self.colors[y1][x]) not in (YELLOW,RED) and (self.colors[y1+1][x]) not in (YELLOW,RED) and (self.colors[y1-1][x]) not in (YELLOW,RED):
                 self.set_tile(x,y1,".",CYAN)
                 self.set_tile(x,y1-1,'-',GREEN)
                 self.set_tile(x,y1+1,'-',GREEN)
         
         for y in range(min(y1,y2),max(y1,y2)+1):
-            if (self.colors[y][x2]) not in (YELLOW,RED) and (self.colors[y][x2+1]) not in (YELLOW,RED) and (self.colors[y][x2-1]) not in (YELLOW,RED):
+            # if (self.colors[y][x2]) not in (YELLOW,RED) and (self.colors[y][x2+1]) not in (YELLOW,RED) and (self.colors[y][x2-1]) not in (YELLOW,RED):
                 self.set_tile(x2,y,'.',CYAN)
                 self.set_tile(x2-1,y,'|',GREEN)
                 self.set_tile(x2+1,y,'|',GREEN)
@@ -157,6 +157,39 @@ class Gamemap:
     def connect_all_rooms(self):
         for i in range(1,len(self.rooms)):
             self.connect_rooms(self.rooms[i-1],self.rooms[i])
+    
+    def is_walkable(self,x,y):
+        return self.get_tile(x,y)=="."
+            
+    def validate(self):
+        checked=[[False for _ in range(self.width)]for _ in range(self.height)]
+        start_x,start_y = self.rooms[0].center()
+        queue = [(start_x,start_y)]
+        checked[start_y][start_x]= True
+        
+        while queue:
+            x,y = queue.pop(0)
+            directions = [(0,-1),(0,1),(-1,0),(1,0)]
+            for a,b in directions:
+                c = a+x
+                d = b+y
+                if 0 <= c<self.width and 0<=d<self.height:
+                    if self.is_walkable(c,d) and not checked[d][c]:
+                        checked[d][c] = True
+                        queue.append((c,d))
+        
+        for room in self.rooms:
+            x,y=room.center()
+            
+            if not checked[y][x]:
+                print(x,y)
+                print(self.get_tile(x,y))
+                return False
+                
+        return True
+
+                     
+        
             
         
             
@@ -178,5 +211,8 @@ if __name__=="__main__":
     game_map = Gamemap(50, 50)
 
     game_map.generate_rooms(10, 5, 10)
+    print(game_map.rooms[i-1].center())
+    print(game_map.rooms[i].center())
     game_map.connect_all_rooms()
+    print(game_map.validate())
     game_map.display()
