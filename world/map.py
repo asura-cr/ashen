@@ -123,17 +123,40 @@ class Gamemap:
     
     
     def create_corridor(self,x1,x2,y1,y2):
-        for x in range(min(x1,x2),max(x1,x2)+1):
-            self.set_tile(x,y1,".",CYAN)
-                #self.set_tile(x,y1-1,'-',GREEN)
-                #self.set_tile(x,y1+1,'-',GREEN)
+        def horizontal_first():
+            path=[]
+            for x in range(min(x1,x2),max(x1,x2)+1):
+                self.set_tile(x,y1,".",CYAN)
+            step =1 if y1>=y2 else -1
+            for y in range(y1+step,y2+step,step):
+                path.append((x2,y))
+            return path
         
-        for y in range(min(y1,y2),max(y1,y2)+1):
-            self.set_tile(x2,y,'.',CYAN)
-                #self.set_tile(x2-1,y,'|',GREEN)
-                #self.set_tile(x2+1,y,'|',GREEN)
-        #self.create_corridor_walls(x1,x2,y1,y2)
+        def vertical_first():
+            path=[]
+            step=1 if y2>y1 else -1
+            for y in range(y1,y2+step,step):
+                path.append((x1,y))
+            for x in range(min(x1,x2),max(x1,x2)+1):
+                path.append((x,y2))
+            return path
         
+        def valid(path):
+            for x,y in path:
+                if (x,y)==(x1,y1) or (x,y)==(x2,y2):
+                    continue
+                if self.colors[y][x]==RED or self.colors[y][x]==YELLOW:
+                    return False
+                return True
+            
+        paths=[horizontal_first(),vertical_first()]
+        
+        for path in paths:
+            if valid(path):
+                for x,y in path:
+                    self.set_tile(x,y,".",CYAN)
+                return
+        print("Couldnt connect rooms ",(x1,y1),(x2,y2))
     
     def is_protected_tile(self,x,y):
         if x<0 or x>=self.width or y<0 or y>=self.height:
@@ -157,7 +180,8 @@ class Gamemap:
                 self.set_tile(x2+1,y,'|',GREEN)
             
             
-        
+    
+
     def create_entrance(self,x,y):
         self.set_tile(x,y,".")
         
