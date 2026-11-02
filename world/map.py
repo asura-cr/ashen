@@ -31,6 +31,16 @@ class Room:
         cy=self.y+self.height//2
         return cx,cy
     
+    def get_entrance(self,direction):
+        if direction=="right":
+            return self.x + self.width - 1,self.y + self.height//2
+        elif direction == "left":
+            return self.x, self.y + self.height//2
+        elif direction == "up":
+            return self.x + self.width//2 , self.y
+        elif direction == "down":
+            return self.x + self.width//2, self.y + self.height -1
+    
 
 
 class Gamemap:
@@ -111,15 +121,6 @@ class Gamemap:
                     
     """
     
-    def get_entrance(self,direction):
-        if direction=="right":
-            return self.x + self.width - 1,self.y + self.height//2
-        elif direction == "left":
-            return self.x, self.y + self.height//2
-        elif direction == "up":
-            return self.x + self.width//2 , self.y
-        elif direction == "down":
-            return self.x + self.width//2, self.y + self.height -1
     
     def create_corridor(self,x1,x2,y1,y2):
         for x in range(min(x1,x2),max(x1,x2)+1):
@@ -158,7 +159,7 @@ class Gamemap:
             
         
     def create_entrance(self,x,y):
-        self.set_tile(x,y," ")
+        self.set_tile(x,y,".")
         
 
     def generate_rooms(self,max_rooms,min_size,max_size):
@@ -183,7 +184,29 @@ class Gamemap:
     def connect_rooms(self,room1,room2):
         x1,y1=room1.center()
         x2,y2=room2.center()
-        self.create_corridor(x1,x2,y1,y2)
+        
+        dx=x2-x1
+        dy=y2-y1
+        
+        if abs(dx)>abs(dy):
+            if dx>0:
+                start = room1.get_entrance("right")
+                end = room2.get_entrance("left")
+            else:
+                start = room1.get_entrance("left")
+                end = room2.get_entrance('right')
+        else:
+            if dy>0:
+                start=room1.get_entrance("down")
+                end=room2.get_entrance('up')
+            else:
+                start=room1.get_entrance("up")
+                end=room2.get_entrance("down")
+        self.create_entrance(*start)
+        self.create_entrance(*end)
+        self.create_corridor(start[0],end[0],start[1],end[1])
+        
+        
             
 
     def connect_all_rooms(self):
