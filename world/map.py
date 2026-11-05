@@ -20,6 +20,10 @@ HIGHLIGHTS= {
     CYAN: Back.CYAN
     
 }
+WALL="\033[48;2;49;92;145m"
+FLOOR="\033[48;2;20;42;69m"
+PLAYER= "\033[38;2;220;235;255m"
+RESET="\033[0m"
 
 class Room:
     def __init__(self,x,y,width,height):
@@ -351,11 +355,14 @@ class Gamemap:
                 tile= self.tiles[y][x]
                 color = self.colors[y][x]
                 
-                if color and tile in ("|","-","+","."):
-                    hightlight= HIGHLIGHTS.get(color,"")
-                    print(hightlight+Fore.WHITE+tile+RESET,end="")
+                if player.x==x and player.y==y:
+                    print(PLAYER+"@"+RESET,end="")
+                elif tile in ("|","-","+"):
+                    print(WALL+" "+RESET,end="")
+                elif tile == ".":
+                    print(FLOOR+ " " + RESET,end="")
                 else:
-                    print(tile,end="")
+                    print(" ",end="") 
             print()
             
               
