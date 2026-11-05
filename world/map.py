@@ -24,6 +24,8 @@ WALL="\033[48;2;49;92;145m"
 FLOOR="\033[48;2;20;42;69m"
 PLAYER= "\033[38;2;220;235;255m"
 RESET="\033[0m"
+EXPLORED_WALL="\033[48;2;12;25;40m"
+EXPLORED_FLOOR="\033[48;2;8;17;29m"
 
 class Room:
     def __init__(self,x,y,width,height):
@@ -77,6 +79,7 @@ class Gamemap:
         self.rooms=[]
         self.tiles= [[" " for _ in range(width)] for _ in range(height)]
         self.colors=[[None for _ in range(width)]for _ in range(height)]
+        self.explored=[[False for _ in range(width)]for _ in range(height)]
 
     def set_tile(self,x,y,tile,color=None):
         if 0 <=x<self.width and 0<=y<self.height:
@@ -338,16 +341,21 @@ class Gamemap:
         camera_x = player.x - view_width//2
         camera_y = player.y - view_height//2
         
+        
         camera_x=max(0,min(camera_x,self.width-view_width))
         camera_y=max(0,min(camera_y,self.height-view_height))
         
         for y in range(camera_y, min(camera_y+view_height,self.height)):
             for x in range(camera_x, min(camera_x+view_width,self.width)):
                 
-                if not self.can_see(x,y,player):
-                    print(" ",end="")
-                    continue
+                visible=self.can_see(x,y,player)
+                if visible:
+                    self.explored[y][x]=True
                 
+                if not self.explored[y][x]:
+                    print(" ",end="")
+                    continue 
+                               
                 if player.x==x and player.y==y:
                     print(WHITE + "@" + RESET,end="")
                     continue
@@ -358,9 +366,16 @@ class Gamemap:
                 if player.x==x and player.y==y:
                     print(PLAYER+"@"+RESET,end="")
                 elif tile in ("|","-","+"):
-                    print(WALL+" "+RESET,end="")
+                    if visible:
+                        print(WALL+" "+RESET,end="")
+                    else:
+                        print(EXPLORED_WALL+" "+RESET,end="")
+                
                 elif tile == ".":
-                    print(FLOOR+ " " + RESET,end="")
+                    if visible:
+                        print(FLOOR+ " " + RESET,end="")
+                    else:
+                        print(EXPLORED_FLOOR+" "+RESET,end="")
                 else:
                     print(" ",end="") 
             print()
