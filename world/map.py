@@ -1,5 +1,5 @@
 import random
-from colorama import Fore,Style,init
+from colorama import Fore,Back,Style,init
 import heapq
 import os
 import msvcrt
@@ -12,6 +12,14 @@ BLACK=Fore.BLACK
 CYAN=Fore.CYAN
 GREEN=Fore.GREEN
 WHITE=Fore.WHITE
+RESET=Style.RESET_ALL
+HIGHLIGHTS= {
+    RED: Back.RED,
+    GREEN: Back.GREEN,
+    YELLOW: Back.YELLOW,
+    CYAN: Back.CYAN
+    
+}
 
 class Room:
     def __init__(self,x,y,width,height):
@@ -340,13 +348,14 @@ class Gamemap:
                     print(WHITE + "@" + RESET,end="")
                     continue
                 
-                title= self.tiles[y][x]
+                tile= self.tiles[y][x]
                 color = self.colors[y][x]
                 
-                if color:
-                    print(color+title+RESET,end="")
+                if color and tile in ("|","-","+","."):
+                    hightlight= HIGHLIGHTS.get(color,"")
+                    print(hightlight+Fore.WHITE+tile+RESET,end="")
                 else:
-                    print(title,end="")
+                    print(tile,end="")
             print()
             
               
