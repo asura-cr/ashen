@@ -1,9 +1,6 @@
 import random
 from colorama import Fore,Back,Style,init
 import heapq
-import os
-import msvcrt
-from entities.player import Player
 
 init()
 
