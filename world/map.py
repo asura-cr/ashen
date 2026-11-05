@@ -3,6 +3,8 @@ from colorama import Fore,Back,Style,init
 import heapq
 import os
 import msvcrt
+from entities.player import Player
+
 init()
 
 RESET=Fore.RESET
@@ -58,19 +60,6 @@ class Room:
             return self.x + self.width//2 , self.y
         elif direction == "down":
             return self.x + self.width//2, self.y + self.height -1
-    
-class Player:
-    def __init__(self,x,y):
-        self.x=x
-        self.y=y
-    
-    def move(self, dx, dy, game_map):
-        nx = self.x + dx
-        ny = self.y + dy
-
-        if game_map.is_walkable(nx, ny):
-            self.x = nx
-            self.y = ny
 
 class Gamemap:
     def __init__(self,width,height):
@@ -379,34 +368,3 @@ class Gamemap:
                 else:
                     print(" ",end="") 
             print()
-            
-              
-
-if __name__=="__main__":
-    game_map = Gamemap(80, 50)
-
-    game_map.generate_rooms(10, 5, 10)
-    game_map.connect_all_rooms()
-    if not game_map.validate():
-        print("Map validation failed.")
-        exit()
-    x,y = game_map.rooms[0].center()
-    player = Player(x,y)
-    while True:
-        os.system("cls")
-        game_map.display(player)
-        print("Use WASD to move, Q to quit")
-        
-        key = msvcrt.getch().decode("utf-8").lower()
-        
-        if key=="w":
-            player.move(0,-1,game_map)
-        if key=="s":
-            player.move(0,1,game_map)
-        if key=="a":
-            player.move(-1,0,game_map)
-        if key=="d":
-            player.move(1,0,game_map)
-        if key=="q":
-            break
-            
