@@ -15,7 +15,7 @@ class Enemy:
     def move_towards_pl(self,player,game_map,enemies):
         path = game_map.find_path(
             (self.x,self.y),
-            (player.x,player.y)
+            (player.x,player.y),walkable_only=True
         )
         
         if not path or len(path) <2:
@@ -29,5 +29,5 @@ class Enemy:
         if any(e.x==nx and e.y==ny for e in enemies if e is not self):
             return
         
-        self.x==nx
-        self.y==ny
+        self.x=nx
+        self.y=ny

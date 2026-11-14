@@ -137,7 +137,7 @@ class Gamemap:
                     
     """
     
-    def find_path(self, start, end):
+    def find_path(self, start, end, walkable_only=False):
         sx, sy = start
         ex, ey = end
 
@@ -160,9 +160,14 @@ class Gamemap:
                 if not (0 <= nx < self.width and 0 <= ny < self.height):
                     continue
 
+                if walkable_only:
+                    if not self.is_walkable(nx,ny):
+                        continue
+                    
+                else:
                 # Allow the destination wall, but avoid other rooms.
-                if next_pos != end and self.colors[ny][nx] in (RED, YELLOW):
-                    continue
+                    if next_pos != end and self.colors[ny][nx] in (RED, YELLOW):
+                        continue
 
                 new_cost = cost[current] + 1
 
