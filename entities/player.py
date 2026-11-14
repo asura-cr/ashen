@@ -21,3 +21,12 @@ class Player:
             
         self.x = nx
         self.y = ny
+        
+    def attack(self,enemies):
+        for en in enemies:
+            dist=abs(self.x-en.x) + abs(self.y - en.y)
+            
+            if dist==1:
+                en.hp -= 3
+                return en
+        return None

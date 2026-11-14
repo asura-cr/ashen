@@ -31,3 +31,13 @@ class Enemy:
         
         self.x=nx
         self.y=ny
+        
+    def attack(self,player):
+        distance=abs(self.x-player.x) + abs(self.y-player.y)
+        
+        if distance==1:
+            damage=1
+            player.hp -= damage
+            return damage
+        
+        return 0
