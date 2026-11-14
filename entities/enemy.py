@@ -13,26 +13,21 @@ class Enemy:
         return z<=radius**2
     
     def move_towards_pl(self,player,game_map,enemies):
-        x=0
-        y=0
+        path = game_map.find_path(
+            (self.x,self.y),
+            (player.x,player.y)
+        )
         
-        if player.x>self.x:
-            x = 1
-        elif player.x<self.x:
-            x = -1
-            
-        if player.y>self.y:
-            y=1
-        elif player.y < self.y:
-            y=-1
-            
-        nx = self.x + x
-        ny = self.y + y
-        
-        if (nx,ny)==(player.x ,player.y):
+        if not path or len(path) <2:
             return
+        
+        nx,ny=path[1]
+        
+        if (nx,ny)==(player.x,player.y):
+            return
+
         if any(e.x==nx and e.y==ny for e in enemies if e is not self):
             return
-        if game_map.is_walkable(nx,ny):
-            self.x=nx
-            self.y=ny
+        
+        self.x==nx
+        self.y==ny
