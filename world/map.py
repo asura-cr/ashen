@@ -323,7 +323,7 @@ class Gamemap:
         return True
 
             
-    def display(self, player=None,view_width=40 , view_height=20):
+    def display(self, player=None,enemies=None,view_width=40 , view_height=20):
         camera_x = player.x - view_width//2
         camera_y = player.y - view_height//2
         
@@ -346,12 +346,19 @@ class Gamemap:
                     print(WHITE + "@" + RESET,end="")
                     continue
                 
+                enemy_here = any(
+                    enemy.x == x and enemy.y == y
+                    for enemy in (enemies or [])
+                    )
+
+                if visible and enemy_here:
+                    print(RED + "e" + RESET, end="")
+                    continue
+                
                 tile= self.tiles[y][x]
                 color = self.colors[y][x]
                 
-                if player.x==x and player.y==y:
-                    print(PLAYER+"@"+RESET,end="")
-                elif tile in ("|","-","+"):
+                if tile in ("|","-","+"):
                     if visible:
                         print(WALL+" "+RESET,end="")
                     else:
