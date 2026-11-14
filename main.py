@@ -52,9 +52,9 @@ def main():
             elif key == " ":
                 t=pl.attack(en)
                 if t:
-                    combat_log.add(f"You hit {t.name} for 3 dmg ")
+                    combat_log.add(f"You hit {t.name} for 3 dmg ","green")
                     if t.hp <=0:
-                        combat_log.add(f"You killed {t.name}")
+                        combat_log.add(f"You killed {t.name}","bold yellow")
                         
             if key in ("w","a","s","d"):
                 for enemy in en:
@@ -62,10 +62,10 @@ def main():
                         enemy.move_towards_pl(pl,gm,en)
                     dmg=enemy.attack(pl)
                     if dmg:
-                        combat_log.add(f"{enemy.name} hit u for {dmg} dmg")
+                        combat_log.add(f"{enemy.name} hit u for {dmg} dmg","red")
                     
                     if pl.hp <= 0:
-                        combat_log.add(f"{enemy.name} killed u")
+                        combat_log.add(f"{enemy.name} killed u","bold red")
                         break
                 en = [enemy for enemy in en if enemy.hp>0]
             if pl.hp <= 0:
