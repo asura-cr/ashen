@@ -26,4 +26,4 @@ def display_hud(player):
     )
     
     panel=Panel.fit(content, title="Player Stats",border_style="blue")
-    console.print(Align(panel,align="right"))
+    return panel
