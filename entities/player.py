@@ -2,6 +2,12 @@ class Player:
     def __init__(self,x,y):
         self.x=x
         self.y=y
+        
+        self.hp=10
+        self.max_hp=10
+        
+        self.stam=100
+        self.max_stam=100
     
     def move(self, dx, dy, game_map, enemies):
         nx = self.x + dx

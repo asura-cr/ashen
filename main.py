@@ -4,6 +4,7 @@ from world.map import Gamemap
 from entities.player import Player
 from entities.enemy import Enemy
 from systems.spawning import spawn_enemies
+from systems.hud import display_hud
 
 def main():
     gm=Gamemap(50,20)
@@ -16,11 +17,11 @@ def main():
     pl=Player(x,y)
     en=spawn_enemies(gm,pl,5)
     print([(e.x, e.y) for e in en])
-    input("press enter to continue")
 
     while True:
         os.system("cls")
         gm.display(pl,en)
+        display_hud(pl)
         print("Use WASD To Move \n Q to quit")
         key = msvcrt.getch().decode("utf-8").lower()
         
