@@ -1,24 +1,33 @@
 from colorama import Fore,Style
 
-def vwalls(text,width):
+def hudline(text,width):
     print(f"║ {text:<{width-2}} ║")
 
 
 def display_hud(player):
-    hearts=""
     width=35
     top =  "╔" + "═" * width + "╗"
     bottom = "╚" + "═" * width + "╝"
-    print("║" + " " * (width + 2) + "║")
+    
+    hearts=""
+    vhearts=""
     
     print(top)
+    hudline("PLAYER STATUS",width)
+    print("║" +( " " * (width)) + "║")
+    
     for i in range(player.max_hp):
         if i < player.hp:
-            hearts += Fore.RED + "♥"
+            hearts += Fore.RED + "♥ "
+            vhearts += "♥ "
         else:
-            hearts +=Fore.WHITE + "♡"
+            hearts +=Fore.WHITE + "♡ "
+            vhearts += "♡ "
             
-    print(f"║ HP: {hearts}{Style.RESET_ALL} ║")
+            
+    hudline("HEALTH",width)
+    p=width-2- len(vhearts)
+    print(f"║ {hearts}{Style.RESET_ALL}{' ' * (p+1) }║")
     
     barl=20
     filled=int(player.stam/player.max_stam*barl)
@@ -26,7 +35,13 @@ def display_hud(player):
     bar = Fore.GREEN + "█" * filled
     bar += Fore.WHITE + "░" * (barl-filled)
     
-    print(f"║ Stamina: {bar}{Style.RESET_ALL} {player.stam}/{player.max_stam} ║" )
+    vbar= "█" * filled + "░" * (barl-filled)
+    
+    
+    hudline("STAMINA",width)
+    s=f"{vbar} {player.stam}/{player.max_stam}"
+    padding= width - 2 -len(s)
+    print(f"║ {bar}{Style.RESET_ALL} {player.stam}/{player.max_stam}{' ' * (padding)} ║" )
     
     print(bottom)
     
