@@ -1,47 +1,29 @@
-from colorama import Fore,Style
+from rich.console import Console
+from rich.panel import Panel
+from rich.align import Align
 
-def hudline(text,width):
-    print(f"║ {text:<{width-2}} ║")
-
+console=Console()
 
 def display_hud(player):
-    width=35
-    top =  "╔" + "═" * width + "╗"
-    bottom = "╚" + "═" * width + "╝"
-    
-    hearts=""
-    vhearts=""
-    
-    print(top)
-    hudline("PLAYER STATUS",width)
-    print("║" +( " " * (width)) + "║")
-    
-    for i in range(player.max_hp):
-        if i < player.hp:
-            hearts += Fore.RED + "♥ "
-            vhearts += "♥ "
-        else:
-            hearts +=Fore.WHITE + "♡ "
-            vhearts += "♡ "
-            
-            
-    hudline("HEALTH",width)
-    p=width-2- len(vhearts)
-    print(f"║ {hearts}{Style.RESET_ALL}{' ' * (p+1) }║")
+    health= " ".join(
+        "[red]♡[/red] " if i < player.hp else "[dim]♡[/dim] "
+        for i in range(player.max_hp)
+    )
     
     barl=20
-    filled=int(player.stam/player.max_stam*barl)
+    filled=int(player.stam/player.max_stam * barl)
     
-    bar = Fore.GREEN + "█" * filled
-    bar += Fore.WHITE + "░" * (barl-filled)
+    stam= (
+        f"[green]{'█' * filled}[/green]"
+        f"[white]{'░' * (barl-filled)}[/white]"
+    )
     
-    vbar= "█" * filled + "░" * (barl-filled)
+    content = (
+        f"[bold]HEALTH[/bold]\n"
+        f"{health}\n \n"
+        f"[bold]STAMINA[/bold]\n"
+        f"{stam} {player.stam}/{player.max_stam} \n"
+    )
     
-    
-    hudline("STAMINA",width)
-    s=f"{vbar} {player.stam}/{player.max_stam}"
-    padding= width - 2 -len(s)
-    print(f"║ {bar}{Style.RESET_ALL} {player.stam}/{player.max_stam}{' ' * (padding)} ║" )
-    
-    print(bottom)
-    
+    panel=Panel.fit(content, title="Player Stats",border_style="blue")
+    console.print(Align(panel,align="right"))
