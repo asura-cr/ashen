@@ -1,14 +1,19 @@
 from rich.layout import Layout
 from rich import print
-from hud import display_hud
+from rich.text import Text
+from rich.panel import Panel
+from systems.hud import display_hud
+from io import StringIO
+from contextlib import redirect_stdout
 
-class TestPlayer:
-    hp = 7
-    max_hp = 10
-    stam = 75
-    max_stam = 100
+    
+def render_dungeon(game_map,player,enemies):
+    buffer=StringIO()
+    with redirect_stdout(buffer):
+        game_map.display(player,enemies)
+    return Text.from_ansi(buffer.getvalue())
 
-def create_layout(player):
+def create_layout(player,game_map,enemies):
     layout=Layout()
     
     sidebar=Layout(name="sidebar")
@@ -25,8 +30,9 @@ def create_layout(player):
     )
     
     layout["HUD"].update(display_hud(player))
+    
+    dg = render_dungeon(game_map,player,enemies)
+    layout["dungeon"].update(
+        Panel.fit(dg,title="DUNGEON",border_style="blue")
+    )
     return layout
-
-player = TestPlayer()
-layout=create_layout(player)
-print(layout)

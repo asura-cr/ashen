@@ -348,7 +348,7 @@ class Gamemap:
                     continue 
                                
                 if player.x==x and player.y==y:
-                    print(WHITE + "@" + RESET,end="")
+                    print(WHITE + FLOOR+"웃" + RESET,end="")
                     continue
                 
                 enemy_here = any(
@@ -357,7 +357,7 @@ class Gamemap:
                     )
 
                 if visible and enemy_here:
-                    print(RED + "e" + RESET, end="")
+                    print(RED + FLOOR + "Ψ" + RESET, end="")
                     continue
                 
                 tile= self.tiles[y][x]
