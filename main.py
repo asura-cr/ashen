@@ -71,10 +71,10 @@ def run_game():
                     if r=="no_stam":
                         combat_log.add(f"You dont have enough stamina to use {atk["name"]} , {pl.stam} / {atk["stam"]} ","yellow")
                     elif r=="no_mob_nearby":
-                        combat_log.add("There is no monster nearby")
+                        combat_log.add("There is no monster nearby","yellow")
                     elif r=="hit":
                         turn_done= True
-                        combat_log.add(f"You use {atk["name"]} for {atk["stam"]} stamina and dealt {atk["dmg"]} dmg to {t.name} , remaining health : ({t.hp}/ {t.max_hp})","green")
+                        combat_log.add(f"You use {atk["name"]} on {t.name} , remaining health : ({t.hp}/ {t.max_hp})","green")
                         if t.hp<=0:
                             combat_log.add(f"You killed {t.name}","bold yellow")
                             kills +=1
