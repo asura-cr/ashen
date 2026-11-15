@@ -1,4 +1,5 @@
 import msvcrt
+import time
 
 from world.map import Gamemap
 from entities.player import Player
@@ -6,6 +7,7 @@ from systems.spawning import spawn_enemies
 from systems.interface import create_layout
 from systems.interface import update_layout
 from systems.combat import Combatlog
+from systems.interface import show_game_over
 
 from rich.console import Console
 from rich.live import Live
@@ -37,6 +39,7 @@ def main():
             
         while True:
             
+            update_layout(layout,pl,gm,en,combat_log)
             key = msvcrt.getch().decode("utf-8").lower()
         
             if key == "w":
@@ -60,18 +63,31 @@ def main():
                 for enemy in en:
                     if enemy.can_see_pl(pl):
                         enemy.move_towards_pl(pl,gm,en)
+                        
                     dmg=enemy.attack(pl)
+                    
                     if dmg:
                         combat_log.add(f"{enemy.name} hit u for {dmg} dmg","red")
                     
                     if pl.hp <= 0:
                         combat_log.add(f"{enemy.name} killed u","bold red")
+                        update_layout(layout,pl,gm,en,combat_log)
+                        live.refresh()
                         break
                 en = [enemy for enemy in en if enemy.hp>0]
-            if pl.hp <= 0:
-                break
-            update_layout(layout,pl,gm,en,combat_log)
-            live.refresh()
+                
+                if pl.hp <= 0:
+                    show_game_over(layout)
+                    live.refresh()
+                
+                    while True:
+                        choice=msvcrt.getch().decode("utf-8").lower()
+                    
+                        if choice== "q":
+                            return
+                        if choice== "r":
+                            main()
+                            return
     if pl.hp <= 0:
         pa=Align.center(
             Panel.fit(

@@ -2,6 +2,9 @@ from rich.layout import Layout
 from rich import print
 from rich.text import Text
 from rich.panel import Panel
+from rich.console import Group
+from rich.align import Align
+
 from systems.hud import display_hud
 from io import StringIO
 from contextlib import redirect_stdout
@@ -46,3 +49,15 @@ def update_layout(layout,player,game_map,enemies,combat_log):
     layout["dungeon"].update(
         Panel(dg,title="DUNGEON",border_style="blue")
     )
+    
+def game_over():
+    context=Group(
+        Text("YOU DIED",style="bold red",justify="center"),
+        Text("You journey ends here..... ",style="dim",justify="center"),
+        Text(""),
+        Text(" [R] Restart     [Q] Quit ",style="bold white",justify="center")
+        )
+    return Panel(context,title="GAME OVER",border_style="red",padding=(2,6),width=45)
+
+def show_game_over(layout):
+    layout["dungeon"].update(Align.center(game_over(),vertical="middle"))
