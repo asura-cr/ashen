@@ -2,8 +2,8 @@ ATTACKS = {
     "slash":       {"name": "Slash",       "key": "z", "dmg": 3,  "stam": 5,  "range": 1},
     "powerslash":  {"name": "Power Slash", "key": "x", "dmg": 10, "stam": 25, "range": 1},
     "lunge":       {"name": "Lunge",       "key": "c", "dmg": 5,  "stam": 10, "range": 2},
-    "spear_throw": {"name": "Spear Throw", "key": "v", "dmg": 7,  "stam": 15, "range": 5},
-    "bow":         {"name": "Bow",         "key": "b", "dmg": 1,  "stam": 3,  "range": 8},
+    "spear_throw": {"name": "Spear Throw", "key": "v", "dmg": 7,  "stam": 15, "range": 3},
+    "bow":         {"name": "Bow",         "key": "b", "dmg": 1,  "stam": 3,  "range": 5},
 }
 
 class Player:

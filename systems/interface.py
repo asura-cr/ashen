@@ -23,7 +23,8 @@ def create_layout(player,game_map,enemies,combat_log):
     
     sidebar.split_column(
         Layout(name="HUD",size=8),
-        Layout(name="COMBAT LOG",ratio=1)
+        Layout(name="COMBAT LOG",ratio=1),
+        Layout(name="CONTROLS GUIDE",ratio=1)
     )
     
     
@@ -34,6 +35,26 @@ def create_layout(player,game_map,enemies,combat_log):
     
     layout["HUD"].update(display_hud(player))
     layout["COMBAT LOG"].update(combat_log.display())
+    
+    content=Panel.fit(Group(
+        Text(""),
+        Text(" - MOVEMENT GUIDE",style="bold cyan3"),
+        Text(""),
+        Text("W - Move Up",style="medium_spring_green"),
+        Text("A - Move Left",style="medium_spring_green"),
+        Text("S - Move Right",style="medium_spring_green"),
+        Text("D - Move Down",style="medium_spring_green"),
+        Text(""),
+        Text(" - ATTACK GUIDE",style="bold cyan3"),
+        Text(""),
+        Text(" Z - Slash , Damage dealt: 3 , Cost: 5 Stam, Range: 1 Block",style="medium_spring_green"),
+        Text(" X - Power Slash , Damage dealt: 10 , Cost: 25 Stam, Range: 1 Block",style="medium_spring_green"),
+        Text(" C - Lunge , Damage dealt: 5 , Cost: 10 Stam, Range: 2 Blocks",style="medium_spring_green"),
+        Text(" V - Spear Throw , Damage dealt: 7 , Cost: 15 Stam, Range: 3 Blocks",style="medium_spring_green"),
+        Text(" B - Shoot an arrow , Damage dealt: 1 , Cost: 3 Stam, Range: 5 Blocks",style="medium_spring_green")
+    ),title="CONTROLS GUIDE",border_style="blue")
+    
+    layout["CONTROLS GUIDE"].update(content)
     
     dg = render_dungeon(game_map,player,enemies)
     layout["dungeon"].update(
