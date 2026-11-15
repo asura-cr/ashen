@@ -1,3 +1,11 @@
+ATTACKS = {
+    "slash":       {"name": "Slash",       "key": "z", "dmg": 3,  "stam": 5,  "range": 1},
+    "powerslash":  {"name": "Power Slash", "key": "x", "dmg": 10, "stam": 25, "range": 1},
+    "lunge":       {"name": "Lunge",       "key": "c", "dmg": 5,  "stam": 10, "range": 2},
+    "spear_throw": {"name": "Spear Throw", "key": "v", "dmg": 7,  "stam": 15, "range": 5},
+    "bow":         {"name": "Bow",         "key": "b", "dmg": 1,  "stam": 3,  "range": 8},
+}
+
 class Player:
     def __init__(self,x,y):
         self.x=x
@@ -8,6 +16,8 @@ class Player:
         
         self.stam=100
         self.max_stam=100
+        
+        
     
     def move(self, dx, dy, game_map, enemies):
         nx = self.x + dx
@@ -22,12 +32,17 @@ class Player:
         self.x = nx
         self.y = ny
         
-    def attack(self,enemies):
-        for en in enemies:
-            dist=abs(self.x-en.x) + abs(self.y - en.y)
-            
-            if dist==1:
-                en.hp -= 3
-                self.stam -=1
-                return en
-        return None
+    def attack(self,enemies,atkmove):
+        data=ATTACKS[atkmove]
+        
+        if self.stam <= data["stam"]:
+            return None,"no_stam"
+        
+        in_range=[e for e in enemies if abs(self.x -e.x) + abs(self.y-e.y) <= data["range"]]
+        if not in_range:
+            return None,"no_mob_nearby"
+        
+        target=min(in_range,key=lambda e: abs(self.x - e.x) + abs(self.y - e.y))
+        target.hp -= data["dmg"]
+        self.stam -= data["stam"]
+        return target,"hit"

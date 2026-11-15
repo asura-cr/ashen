@@ -2,7 +2,7 @@ import msvcrt
 import time
 
 from world.map import Gamemap
-from entities.player import Player
+from entities.player import Player,ATTACKS
 from systems.spawning import spawn_enemies
 from systems.interface import create_layout
 from systems.interface import update_layout
@@ -48,27 +48,39 @@ def run_game():
                 key = msvcrt.getch().decode("utf-8").lower()
             except UnicodeDecodeError:
                 continue
+            
+            turn_done=False
         
             if key == "w":
                 pl.move(0, -1, gm,en )
+                turn_done=True
             elif key == "s":
                 pl.move(0, 1, gm,en)
+                turn_done=True
             elif key == "a":
                 pl.move(-1, 0, gm,en)
+                turn_done=True
             elif key == "d":
                 pl.move(1, 0, gm,en)
+                turn_done=True
             elif key == "q":
                 return False
-            elif key == " ":
-                t=pl.attack(en)
-                en = [enemy for enemy in en if enemy.hp>0]
-                if t:
-                    combat_log.add(f"You hit {t.name} for 3 dmg, {t.hp}/{t.max_hp} left ","green")
-                    live.refresh()
-                    if t.hp <=0:
-                        combat_log.add(f"You killed {t.name}","bold yellow")
-                        kills +=1
-            if key in ("w","a","s","d"," "):
+            for kind,atk in ATTACKS.items():
+                if key==atk["key"]:
+                    t,r=pl.attack(en,kind)
+                    if r=="no_stam":
+                        combat_log.add(f"You dont have enough stamina to use {atk["name"]} , {pl.stam} / {atk["stam"]} ","yellow")
+                    elif r=="no_mob_nearby":
+                        combat_log.add("There is no monster nearby")
+                    elif r=="hit":
+                        turn_done= True
+                        combat_log.add(f"You use {atk["name"]} for {atk["stam"]} stamina and dealt {atk["dmg"]} dmg to {t.name} , remaining health : ({t.hp}/ {t.max_hp})","green")
+                        if t.hp<=0:
+                            combat_log.add(f"You killed {t.name}","bold yellow")
+                            kills +=1
+                        en = [e for e in en if e.hp>0]
+                        
+            if turn_done:
                 for enemy in en:
                     dmg = 0
                     if abs(enemy.x - pl.x) + abs(enemy.y - pl.y) == 1:
