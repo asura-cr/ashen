@@ -70,10 +70,12 @@ def run_game():
                         kills +=1
             if key in ("w","a","s","d"," "):
                 for enemy in en:
+                    dmg = 0
+                    if abs(enemy.x - pl.x) + abs(enemy.y - pl.y) == 1:
+                        dmg=enemy.attack(pl)
                     if enemy.can_see_pl(pl):
                         enemy.move_towards_pl(pl,gm,en)
-                        
-                    dmg=enemy.attack(pl)
+
                     
                     if dmg:
                         combat_log.add(f"{enemy.name} hit u for {dmg} dmg , HP Left : {pl.hp}/{pl.max_hp}","red")
@@ -92,8 +94,10 @@ def run_game():
                     live.refresh()
                 
                     while True:
-                        choice=msvcrt.getch().decode("utf-8").lower()
-                    
+                        try:
+                            choice=msvcrt.getch().decode("utf-8").lower()
+                        except UnicodeDecodeError:
+                            continue
                         if choice== "q":
                             return False
                         if choice== "r":
