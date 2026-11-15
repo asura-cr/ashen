@@ -76,7 +76,6 @@ def run_game():
                     if enemy.can_see_pl(pl):
                         enemy.move_towards_pl(pl,gm,en)
 
-                    
                     if dmg:
                         combat_log.add(f"{enemy.name} hit u for {dmg} dmg , HP Left : {pl.hp}/{pl.max_hp}","red")
                         live.refresh()

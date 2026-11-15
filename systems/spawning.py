@@ -1,10 +1,12 @@
 import random
-from entities.enemy import Enemy
+from entities.enemy import Enemy,MOB_TYPES
 
 def spawn_enemies(game_map,player,amount):
     enemies=[]
     attempts=0
-    
+    kinds=list(MOB_TYPES)
+    weights =[MOB_TYPES[k]["weight"] for k in kinds]
+    k=random.choices(kinds,weights)[0]
     while len(enemies)<amount and attempts < amount*10:
         attempts+=1
         
@@ -18,6 +20,6 @@ def spawn_enemies(game_map,player,amount):
             continue
         if any(e.x==x and e.y==y for e in enemies):
             continue
-        enemies.append(Enemy(x,y))
+        enemies.append(Enemy(x,y,k))
         
     return enemies

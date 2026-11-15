@@ -348,16 +348,18 @@ class Gamemap:
                     continue 
                                
                 if player.x==x and player.y==y:
-                    print(WHITE + FLOOR+"웃" + RESET,end="")
+                    print(WHITE + FLOOR+"¥" + RESET,end="")
                     continue
                 
                 enemy_here = any(
                     enemy.x == x and enemy.y == y
                     for enemy in (enemies or [])
                     )
+                
+                e=next((e for e in enemies if e.x==x and e.y==y) ,None)
 
                 if visible and enemy_here:
-                    print(RED + FLOOR + "Ψ" + RESET, end="")
+                    print(RED + FLOOR + e.icon + RESET, end="")
                     continue
                 
                 tile= self.tiles[y][x]
