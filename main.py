@@ -15,19 +15,23 @@ from rich.panel import Panel
 from rich import print
 from rich.align import Align
 
-def main():
+def run_game():
+    start_time=time.time()
     gm=Gamemap(100,40)
     gm.generate_rooms(20,5,15)
     gm.connect_all_rooms()
     if not gm.validate():
         print("Map Validation failed")
-        return
+        return False
     x,y= gm.rooms[0].center()
+    
     pl=Player(x,y)
     en=spawn_enemies(gm,pl,5)
+    
     combat_log=Combatlog()
-
     console=Console()
+    
+    kills=0
         
     layout= create_layout(pl,gm,en,combat_log) 
     with Live(
@@ -40,7 +44,10 @@ def main():
         while True:
             
             update_layout(layout,pl,gm,en,combat_log)
-            key = msvcrt.getch().decode("utf-8").lower()
+            try: 
+                key = msvcrt.getch().decode("utf-8").lower()
+            except UnicodeDecodeError:
+                continue
         
             if key == "w":
                 pl.move(0, -1, gm,en )
@@ -51,15 +58,17 @@ def main():
             elif key == "d":
                 pl.move(1, 0, gm,en)
             elif key == "q":
-                break
+                return False
             elif key == " ":
                 t=pl.attack(en)
+                en = [enemy for enemy in en if enemy.hp>0]
                 if t:
-                    combat_log.add(f"You hit {t.name} for 3 dmg ","green")
+                    combat_log.add(f"You hit {t.name} for 3 dmg, {t.hp}/{t.max_hp} left ","green")
+                    live.refresh()
                     if t.hp <=0:
                         combat_log.add(f"You killed {t.name}","bold yellow")
-                        
-            if key in ("w","a","s","d"):
+                        kills +=1
+            if key in ("w","a","s","d"," "):
                 for enemy in en:
                     if enemy.can_see_pl(pl):
                         enemy.move_towards_pl(pl,gm,en)
@@ -67,7 +76,8 @@ def main():
                     dmg=enemy.attack(pl)
                     
                     if dmg:
-                        combat_log.add(f"{enemy.name} hit u for {dmg} dmg","red")
+                        combat_log.add(f"{enemy.name} hit u for {dmg} dmg , HP Left : {pl.hp}/{pl.max_hp}","red")
+                        live.refresh()
                     
                     if pl.hp <= 0:
                         combat_log.add(f"{enemy.name} killed u","bold red")
@@ -77,22 +87,29 @@ def main():
                 en = [enemy for enemy in en if enemy.hp>0]
                 
                 if pl.hp <= 0:
-                    show_game_over(layout)
+                    time_survived= int(time.time()-start_time)
+                    show_game_over(layout,kills,time_survived)
                     live.refresh()
                 
                     while True:
                         choice=msvcrt.getch().decode("utf-8").lower()
                     
                         if choice== "q":
-                            return
+                            return False
                         if choice== "r":
-                            main()
-                            return
+                            return True
     if pl.hp <= 0:
         pa=Align.center(
             Panel.fit(
                     "[red] \n YOU DIED [/red] \n [dim] your journey ends here.... [/dim]",border_style="red"))
         console.print(pa,justify="center")
         
+def main():
+    while True:
+        restart= run_game()
+        if not restart:
+            break
+            
+            
 if __name__ == "__main__":
     main()

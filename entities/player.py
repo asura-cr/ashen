@@ -28,5 +28,6 @@ class Player:
             
             if dist==1:
                 en.hp -= 3
+                self.stam -=1
                 return en
         return None
