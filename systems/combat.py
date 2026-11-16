@@ -8,7 +8,7 @@ class Combatlog:
     def add(self,msg,style="white"):
         self.msgs.append((msg,style))
         
-        if len(self.msgs)>10:
+        if len(self.msgs)>5:
             self.msgs.pop(0)
         
     def display(self):

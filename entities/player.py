@@ -1,3 +1,6 @@
+from entities.items import ITEMS
+
+
 ATTACKS = {
     "slash":       {"name": "Slash",       "key": "z", "dmg": 3,  "stam": 5,  "range": 1},
     "powerslash":  {"name": "Power Slash", "key": "x", "dmg": 10, "stam": 25, "range": 1},
@@ -16,6 +19,12 @@ class Player:
         
         self.stam=100
         self.max_stam=100
+        
+        self.inv={
+            "small_hp":1,
+            "small_stam":1,
+            "full_stam":0
+            }
         
         
     
@@ -46,3 +55,19 @@ class Player:
         target.hp -= data["dmg"]
         self.stam -= data["stam"]
         return target,"hit"
+    
+    def use_item(self,item):
+        d=ITEMS[item]
+        
+        if self.inventory[item]<=0:
+            return "none_left"
+        
+        if d["effect"]=="hp":
+            if self.hp>=self.max_hp:
+                return "full"
+            self.hp = min(self.max_hp,self.hp+d["amount"])
+        elif d["effect"]=="stam":
+            if self.stam>=self.max_stam:
+                return "full"
+            self.stam=min(self.max_stam,self.stam+d["amount"])
+        

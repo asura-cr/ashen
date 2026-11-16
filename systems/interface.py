@@ -10,7 +10,6 @@ from rich import box
 from systems.hud import display_hud
 from io import StringIO
 from contextlib import redirect_stdout
-
     
 def render_dungeon(game_map,player,enemies):
     buffer=StringIO()
@@ -26,7 +25,8 @@ def create_layout(player,game_map,enemies,combat_log):
     sidebar.split_column(
         Layout(name="HUD",size=8),
         Layout(name="COMBAT LOG",ratio=1),
-        Layout(name="CONTROLS GUIDE",ratio=1)
+        Layout(name="INVENTORY",ratio=1),
+        Layout(name="CONTROLS GUIDE",ratio=2)
     )
     
     
@@ -56,6 +56,16 @@ def create_layout(player,game_map,enemies,combat_log):
     
     layout["CONTROLS GUIDE"].update(content)
     
+    
+    cd=Panel(
+        Group(
+            f"Small HP Potion: {player.inv["small_hp"]}",
+            f"Small Stamina Potion: {player.inv["small_stam"]}",
+            f"Full Stamina Potion: {player.inv["full_stam"]}",
+        ),border_style="blue",title="INVENTORY"
+    )
+    layout["INVENTORY"].update(cd)
+    
     dg = render_dungeon(game_map,player,enemies)
     layout["dungeon"].update(
         Panel.fit(dg,title="DUNGEON",border_style="blue")
@@ -71,6 +81,8 @@ def update_layout(layout,player,game_map,enemies,combat_log):
         Panel(dg,title="DUNGEON",border_style="blue")
     )
     
+def update_inv(layout,inv):
+    layout["INVENTORY"].update(inv)
 def game_over(kills,stime):
     context=Group(
         Text("YOU DIED",style="bold red",justify="center"),
