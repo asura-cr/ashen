@@ -4,6 +4,8 @@ from rich.text import Text
 from rich.panel import Panel
 from rich.console import Group
 from rich.align import Align
+from rich.table import Table
+from rich import box
 
 from systems.hud import display_hud
 from io import StringIO
@@ -36,22 +38,20 @@ def create_layout(player,game_map,enemies,combat_log):
     layout["HUD"].update(display_hud(player))
     layout["COMBAT LOG"].update(combat_log.display())
     
+    table=Table(expand=True, show_edge=False,border_style="blue",box=box.SQUARE,show_lines=True)
+    table.add_column("Key",style="medium_spring_green",no_wrap=True)
+    table.add_column("Dmg",style="medium_spring_green",no_wrap=True)
+    table.add_column("Cost",style="medium_spring_green",no_wrap=True)
+    table.add_column("Range",style="medium_spring_green",no_wrap=True)
+    
+    table.add_row("Z","3","5","1")
+    table.add_row("X","5","25","1")
+    table.add_row("C","5","10","2")
+    table.add_row("V","7","15","3")
+    table.add_row("B","1","3","5")
+    
     content=Panel.fit(Group(
-        Text(""),
-        Text(" - MOVEMENT GUIDE",style="bold cyan3"),
-        Text(""),
-        Text("W - Move Up",style="medium_spring_green"),
-        Text("A - Move Left",style="medium_spring_green"),
-        Text("S - Move Right",style="medium_spring_green"),
-        Text("D - Move Down",style="medium_spring_green"),
-        Text(""),
-        Text(" - ATTACK GUIDE",style="bold cyan3"),
-        Text(""),
-        Text(" Z - Slash , Damage dealt: 3 , Cost: 5 Stam, Range: 1 Block",style="medium_spring_green"),
-        Text(" X - Power Slash , Damage dealt: 10 , Cost: 25 Stam, Range: 1 Block",style="medium_spring_green"),
-        Text(" C - Lunge , Damage dealt: 5 , Cost: 10 Stam, Range: 2 Blocks",style="medium_spring_green"),
-        Text(" V - Spear Throw , Damage dealt: 7 , Cost: 15 Stam, Range: 3 Blocks",style="medium_spring_green"),
-        Text(" B - Shoot an arrow , Damage dealt: 1 , Cost: 3 Stam, Range: 5 Blocks",style="medium_spring_green")
+        table
     ),title="CONTROLS GUIDE",border_style="blue")
     
     layout["CONTROLS GUIDE"].update(content)
