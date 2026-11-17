@@ -63,6 +63,8 @@ def create_layout(player,game_map,enemies,combat_log):
         for i,j in player.inv.items() 
         if j>0
         ]
+    if not lines:
+        lines.append("[dim] your inventory is empty [/dim]")
     cd=Panel(
         Group(
             *lines
