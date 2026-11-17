@@ -8,6 +8,7 @@ from systems.interface import create_layout
 from systems.interface import update_layout
 from systems.combat import Combatlog
 from systems.interface import show_game_over
+from entities.items import ITEMS
 
 from rich.console import Console
 from rich.live import Live
@@ -79,6 +80,18 @@ def run_game():
                             combat_log.add(f"You killed {t.name}","bold yellow")
                             kills +=1
                         en = [e for e in en if e.hp>0]
+                        
+            for name,qty in pl.inv.items():
+                if key==ITEMS[name]["key"]:
+                    r = pl.use_item(name)
+                    if r=="none_left":
+                        combat_log.add(f"You dont have any {ITEMS[name]['name']}","yellow")
+                    elif r =="full_hp":
+                        combat_log.add(f"You have full hp","green")
+                    elif r=="full_stam":
+                        combat_log.add(f"Your stamina is already full","green")
+                    else:
+                        combat_log.add(r,"bold green")
                         
             if turn_done:
                 for enemy in en:

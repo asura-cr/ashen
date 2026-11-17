@@ -60,15 +60,19 @@ class Player:
     def use_item(self,item):
         d=ITEMS[item]
         
-        if self.inventory[item]<=0:
+        if self.inv[item]<=0:
             return "none_left"
         
         if d["effect"]=="hp":
             if self.hp>=self.max_hp:
-                return "full"
+                return "full_hp"
             self.hp = min(self.max_hp,self.hp+d["amount"])
+            self.inv[item] -=1
+            return f"restored hp to {self.hp} Hearts"
         elif d["effect"]=="stam":
             if self.stam>=self.max_stam:
-                return "full"
+                return "full_stam"
             self.stam=min(self.max_stam,self.stam+d["amount"])
+            self.inv[item] -=1
+            return f"restored stamina to {self.stam} stamina"
         
