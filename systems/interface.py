@@ -8,6 +8,8 @@ from rich.table import Table
 from rich import box
 
 from systems.hud import display_hud
+from entities.items import ITEMS
+
 from io import StringIO
 from contextlib import redirect_stdout
     
@@ -56,12 +58,14 @@ def create_layout(player,game_map,enemies,combat_log):
     
     layout["CONTROLS GUIDE"].update(content)
     
-    
+    lines = [
+        f"{ITEMS[i]['name']} : {j}"
+        for i,j in player.inv.items() 
+        if j>0
+        ]
     cd=Panel(
         Group(
-            f"Small HP Potion: {player.inv["small_hp"]}",
-            f"Small Stamina Potion: {player.inv["small_stam"]}",
-            f"Full Stamina Potion: {player.inv["full_stam"]}",
+            *lines
         ),border_style="blue",title="INVENTORY"
     )
     layout["INVENTORY"].update(cd)
