@@ -65,7 +65,7 @@ def create_layout(player,game_map,enemies,combat_log):
     
     for i,j in player.inv.items():
         if j>0:
-            invtable.add_row(f"{ITEMS[i]['name']} : {j} -  {ITEMS[i]['key'].upper()}")
+            invtable.add_row(f"{ITEMS[i]['name']}",f'{ITEMS[i]['key'].upper()}', f"{j}")
     if invtable.row_count==0:
         idkwhattoname="[dim] your inventory is empty [/dim]"
     else:
