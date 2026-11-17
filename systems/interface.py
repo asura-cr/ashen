@@ -59,7 +59,7 @@ def create_layout(player,game_map,enemies,combat_log):
     layout["CONTROLS GUIDE"].update(content)
     
     lines = [
-        f"{ITEMS[i]['name']} : {j}"
+        f"{ITEMS[i]['name']} : {j} -  {ITEMS[i]['key'].upper()}"
         for i,j in player.inv.items() 
         if j>0
         ]
