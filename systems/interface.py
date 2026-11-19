@@ -89,8 +89,22 @@ def update_layout(layout,player,game_map,enemies,combat_log):
         Panel(dg,title="DUNGEON",border_style="blue")
     )
     
-def update_inv(layout,inv):
-    layout["INVENTORY"].update(inv)
+    invtable=Table(expand=True, show_edge=False,border_style="blue",box=box.SQUARE,show_lines=True)
+    invtable.add_column("Item",style="medium_spring_green",no_wrap=True)
+    invtable.add_column("Key",style="medium_spring_green",no_wrap=True)
+    invtable.add_column("Qty",style="medium_spring_green",no_wrap=True)
+    
+    for i,j in player.inv.items():
+        if j>0:
+            invtable.add_row(f"{ITEMS[i]['name']}",f'{ITEMS[i]['key'].upper()}', f"{j}")
+    if invtable.row_count==0:
+        idkwhattoname="[dim] your inventory is empty [/dim]"
+    else:
+        idkwhattoname=invtable
+        
+    cd=Panel(idkwhattoname,border_style="blue",title="INVENTORY")
+    layout["INVENTORY"].update(cd)
+    
 def game_over(kills,stime):
     context=Group(
         Text("YOU DIED",style="bold red",justify="center"),

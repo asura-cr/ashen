@@ -4,8 +4,7 @@ import time
 from world.map import Gamemap
 from entities.player import Player,ATTACKS
 from systems.spawning import spawn_enemies,spawn_chests
-from systems.interface import create_layout
-from systems.interface import update_layout
+from systems.interface import create_layout,update_layout
 from systems.combat import Combatlog
 from systems.interface import show_game_over
 from entities.items import ITEMS
