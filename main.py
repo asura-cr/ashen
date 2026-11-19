@@ -3,12 +3,13 @@ import time
 
 from world.map import Gamemap
 from entities.player import Player,ATTACKS
-from systems.spawning import spawn_enemies
+from systems.spawning import spawn_enemies,spawn_chests
 from systems.interface import create_layout
 from systems.interface import update_layout
 from systems.combat import Combatlog
 from systems.interface import show_game_over
 from entities.items import ITEMS
+
 
 from rich.console import Console
 from rich.live import Live
@@ -28,6 +29,8 @@ def run_game():
     
     pl=Player(x,y)
     en=spawn_enemies(gm,pl,5)
+    occupied={(e.x,e.y)for e in en} | {(pl.x,pl.y)}
+    gm.chests=spawn_chests(gm,occupied)
     
     combat_log=Combatlog()
     console=Console()
@@ -51,19 +54,18 @@ def run_game():
                 continue
             
             turn_done=False
+            
+            moves={"w":(0,-1),"s":(0,1),"a":(-1,0),"d":(1,0)}
         
-            if key == "w":
-                pl.move(0, -1, gm,en )
-                turn_done=True
-            elif key == "s":
-                pl.move(0, 1, gm,en)
-                turn_done=True
-            elif key == "a":
-                pl.move(-1, 0, gm,en)
-                turn_done=True
-            elif key == "d":
-                pl.move(1, 0, gm,en)
-                turn_done=True
+            if key in moves:
+                dx,dy=moves[key]
+                chest=next((c for c in gm.chests if (c.x,c.y)==(pl.x+dx,pl.y+dy)and not c.opened),None)
+                if chest:
+                    itms=chest.open(pl)
+                    combat_log.add(f"You open a chest and find : {', '.join(itms)}","cyan")
+                    turn_done=True
+                else:
+                    turn_done=pl.move(dx,dy,gm,en)
             elif key == "q":
                 return False
             for kind,atk in ATTACKS.items():

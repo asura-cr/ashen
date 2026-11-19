@@ -13,10 +13,10 @@ from entities.items import ITEMS
 from io import StringIO
 from contextlib import redirect_stdout
     
-def render_dungeon(game_map,player,enemies):
+def render_dungeon(game_map,player,enemies,chests):
     buffer=StringIO()
     with redirect_stdout(buffer):
-        game_map.display(player,enemies,80,30)
+        game_map.display(player,enemies,chests,80,30)
     return Text.from_ansi(buffer.getvalue())
 
 def create_layout(player,game_map,enemies,combat_log):
@@ -59,8 +59,8 @@ def create_layout(player,game_map,enemies,combat_log):
     layout["CONTROLS GUIDE"].update(content)
     
     invtable=Table(expand=True, show_edge=False,border_style="blue",box=box.SQUARE,show_lines=True)
-    invtable.add_column("Key",style="medium_spring_green",no_wrap=True)
     invtable.add_column("Item",style="medium_spring_green",no_wrap=True)
+    invtable.add_column("Key",style="medium_spring_green",no_wrap=True)
     invtable.add_column("Qty",style="medium_spring_green",no_wrap=True)
     
     for i,j in player.inv.items():
@@ -74,7 +74,7 @@ def create_layout(player,game_map,enemies,combat_log):
     cd=Panel(idkwhattoname,border_style="blue",title="INVENTORY")
     layout["INVENTORY"].update(cd)
     
-    dg = render_dungeon(game_map,player,enemies)
+    dg = render_dungeon(game_map,player,enemies,game_map.chests)
     layout["dungeon"].update(
         Panel.fit(dg,title="DUNGEON",border_style="blue")
     )
@@ -83,7 +83,7 @@ def create_layout(player,game_map,enemies,combat_log):
 def update_layout(layout,player,game_map,enemies,combat_log):
     layout["HUD"].update(display_hud(player))
     layout["COMBAT LOG"].update(combat_log.display())
-    dg=render_dungeon(game_map,player,enemies)
+    dg=render_dungeon(game_map,player,enemies,game_map.chests)
     
     layout["dungeon"].update(
         Panel(dg,title="DUNGEON",border_style="blue")

@@ -1,5 +1,6 @@
 import random
 from entities.enemy import Enemy,MOB_TYPES
+from entities.chests import Chest
 
 def spawn_enemies(game_map,player,amount):
     enemies=[]
@@ -23,3 +24,17 @@ def spawn_enemies(game_map,player,amount):
         enemies.append(Enemy(x,y,k))
         
     return enemies
+
+def spawn_chests(gm,occupied):
+    count=random.randint(1,4)
+    rooms=random.sample(gm.rooms[1:],min(count,len(gm.rooms)-1))
+    chests=[]
+    for r in rooms:
+        cx,cy=r.center()
+        spots=[(cx+dx,cy+dy)for dx in range(-2,3) for dy in range(-2,3)]
+        random.shuffle(spots)
+        for x,y in spots:
+            if gm.is_walkable(x,y) and (x,y) not in occupied:
+                chests.append(Chest(x,y))
+                break
+    return chests

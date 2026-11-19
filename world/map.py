@@ -11,6 +11,7 @@ BLACK=Fore.BLACK
 CYAN=Fore.CYAN
 GREEN=Fore.GREEN
 WHITE=Fore.WHITE
+DIM = "\033[2m"
 RESET=Style.RESET_ALL
 HIGHLIGHTS= {
     RED: Back.RED,
@@ -105,37 +106,6 @@ class Gamemap:
         self.set_tile(x+width-1,y,"+",RED)
         self.set_tile(x+width-1,y+height-1,"+",RED)
         self.rooms.append(Room(x,y,width,height))
-                    
-
-    """           
-    FAILED ver
-    def create_room(self,x,y,width,height):
-    
-    
-        for row in range(y,y+height):
-
-            for col in range(x,x+width):
-                
-                if (col==x)or (col==x+width-1):
-                    self.set_tile(x,row,"|")
-                    self.set_tile(x+width-1,row,"|")
-               
-                else:
-                    self.set_tile(col,row,".") 
-                    
-                self.set_tile(x,row,'|')
-                self.set_tile(x+width-1,row,'|')
-                self.set_tile(col,y,'-')
-                self.set_tile(col,y+height-1,'-')
-                    
-                self.set_tile(x,y,"+")
-        
-        self.set_tile(x,y,"+")
-        self.set_tile(x,y+height-1,'+')
-        self.set_tile(x+width-1,y,"+")
-        self.set_tile(x+width-1,y+height-1,"+")
-                    
-    """
     
     def find_path(self, start, end, walkable_only=False):
         sx, sy = start
@@ -328,7 +298,7 @@ class Gamemap:
         return True
 
             
-    def display(self, player=None,enemies=None,view_width=40 , view_height=20):
+    def display(self, player=None,enemies=None,chests=None,view_width=40 , view_height=20):
         camera_x = player.x - view_width//2
         camera_y = player.y - view_height//2
         
@@ -356,10 +326,18 @@ class Gamemap:
                     for enemy in (enemies or [])
                     )
                 
-                e=next((e for e in enemies if e.x==x and e.y==y) ,None)
+                e=next((e for e in (enemies or []) if e.x==x and e.y==y) ,None)
 
                 if visible and enemy_here:
                     print(RED + FLOOR + e.icon + RESET, end="")
+                    continue
+                
+                c=next((c for c in (chests or []) if c.x==x and c.y==y),None)
+                if visible and c:
+                    if c.opened:
+                        print(DIM+FLOOR+"c"+RESET,end="")
+                    else:
+                        print(YELLOW+FLOOR+"C"+RESET,end="")
                     continue
                 
                 tile= self.tiles[y][x]

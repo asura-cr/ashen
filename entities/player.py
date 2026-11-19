@@ -34,13 +34,14 @@ class Player:
         ny = self.y + dy
 
         if not game_map.is_walkable(nx, ny):
-            return
+            return False
         
         if any(e.x==nx and e.y==ny for e in enemies):
-            return
+            return False
             
         self.x = nx
         self.y = ny
+        return True
         
     def attack(self,enemies,atkmove):
         data=ATTACKS[atkmove]
