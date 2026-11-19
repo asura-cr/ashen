@@ -7,9 +7,9 @@ def spawn_enemies(game_map,player,amount):
     attempts=0
     kinds=list(MOB_TYPES)
     weights =[MOB_TYPES[k]["weight"] for k in kinds]
-    k=random.choices(kinds,weights)[0]
     while len(enemies)<amount and attempts < amount*10:
         attempts+=1
+        k=random.choices(kinds,weights)[0]
         
         room=random.choice(game_map.rooms)
         x= random.randint(room.x+1,room.x + room.width-2)

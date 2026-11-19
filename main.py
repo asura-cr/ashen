@@ -93,6 +93,7 @@ def run_game():
                         combat_log.add(f"Your stamina is already full","green")
                     else:
                         combat_log.add(r,"bold green")
+                        turn_done=True
                         
             if turn_done:
                 for enemy in en:

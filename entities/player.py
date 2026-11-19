@@ -46,7 +46,7 @@ class Player:
     def attack(self,enemies,atkmove):
         data=ATTACKS[atkmove]
         
-        if self.stam <= data["stam"]:
+        if self.stam < data["stam"]:
             return None,"no_stam"
         
         in_range=[e for e in enemies if abs(self.x -e.x) + abs(self.y-e.y) <= data["range"]]

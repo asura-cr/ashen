@@ -9,6 +9,7 @@ from rich import box
 
 from systems.hud import display_hud
 from entities.items import ITEMS
+from entities.player import ATTACKS
 
 from io import StringIO
 from contextlib import redirect_stdout
@@ -46,11 +47,9 @@ def create_layout(player,game_map,enemies,combat_log):
     table.add_column("Cost",style="medium_spring_green",no_wrap=True)
     table.add_column("Range",style="medium_spring_green",no_wrap=True)
     
-    table.add_row("Z","3","5","1")
-    table.add_row("X","5","25","1")
-    table.add_row("C","5","10","2")
-    table.add_row("V","7","15","3")
-    table.add_row("B","1","3","5")
+    for kind in ATTACKS:
+        table.add_row(ATTACKS[kind]["key"].upper(),str(ATTACKS[kind]["dmg"]),str(ATTACKS[kind]["stam"]),str(ATTACKS[kind]["range"]))
+        
     
     content=Panel.fit(Group(
         table
