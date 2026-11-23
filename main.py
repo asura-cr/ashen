@@ -17,7 +17,8 @@ from rich import print
 from rich.align import Align
 
 def run_game():
-    start_time=time.time()
+    start_time=time.monotonic()
+    time_survived= int(time.monotonic()-start_time)
     gm=Gamemap(100,40)
     gm.generate_rooms(20,5,15)
     gm.connect_all_rooms()
@@ -36,7 +37,7 @@ def run_game():
     
     kills=0
         
-    layout= create_layout(pl,gm,en,combat_log) 
+    layout= create_layout(pl,gm,en,combat_log,time_survived) 
     with Live(
         layout,
         console=console,
@@ -45,11 +46,16 @@ def run_game():
     ) as live:
             
         while True:
+            time_survived= int(time.monotonic()-start_time)
             
-            update_layout(layout,pl,gm,en,combat_log)
-            try: 
-                key = msvcrt.getch().decode("utf-8").lower()
-            except UnicodeDecodeError:
+            update_layout(layout,pl,gm,en,combat_log,time_survived)
+            if msvcrt.kbhit():
+                try: 
+                    key = msvcrt.getch().decode("utf-8").lower()
+                except UnicodeDecodeError:
+                    continue
+            else:
+                time.sleep(0.1)
                 continue
             
             turn_done=False
@@ -109,13 +115,12 @@ def run_game():
                     
                     if pl.hp <= 0:
                         combat_log.add(f"{enemy.name} killed u","bold red")
-                        update_layout(layout,pl,gm,en,combat_log)
+                        update_layout(layout,pl,gm,en,combat_log,time_survived)
                         live.refresh()
                         break
                 en = [enemy for enemy in en if enemy.hp>0]
                 
                 if pl.hp <= 0:
-                    time_survived= int(time.time()-start_time)
                     show_game_over(layout,kills,time_survived)
                     live.refresh()
                 

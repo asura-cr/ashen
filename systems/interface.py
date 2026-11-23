@@ -20,7 +20,7 @@ def render_dungeon(game_map,player,enemies,chests):
         game_map.display(player,enemies,chests,80,30)
     return Text.from_ansi(buffer.getvalue())
 
-def create_layout(player,game_map,enemies,combat_log):
+def create_layout(player,game_map,enemies,combat_log,elapsed_time):
     layout=Layout()
     
     sidebar=Layout(name="sidebar")
@@ -38,7 +38,7 @@ def create_layout(player,game_map,enemies,combat_log):
         sidebar
     )
     
-    layout["HUD"].update(display_hud(player))
+    layout["HUD"].update(display_hud(player,elapsed_time))
     layout["COMBAT LOG"].update(combat_log.display())
     
     table=Table(expand=True, show_edge=False,border_style="blue",box=box.SQUARE,show_lines=True)
@@ -79,8 +79,8 @@ def create_layout(player,game_map,enemies,combat_log):
     )
     return layout
 
-def update_layout(layout,player,game_map,enemies,combat_log):
-    layout["HUD"].update(display_hud(player))
+def update_layout(layout,player,game_map,enemies,combat_log,elapsed_time):
+    layout["HUD"].update(display_hud(player,elapsed_time))
     layout["COMBAT LOG"].update(combat_log.display())
     dg=render_dungeon(game_map,player,enemies,game_map.chests)
     
