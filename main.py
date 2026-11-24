@@ -8,6 +8,7 @@ from systems.spawning import spawn_enemies,spawn_chests
 from systems.interface import create_layout,update_layout
 from systems.combat import Combatlog
 from systems.interface import show_game_over,show_game_won
+from systems.leaderboard import save_run,show_lb
 from entities.items import ITEMS
 
 
@@ -18,7 +19,7 @@ from rich import print
 from rich.align import Align
 
 
-def run_game():
+def run_game(player_name):
     start_time=time.monotonic()
     time_survived= int(time.monotonic()-start_time)
     gm=Gamemap(100,40)
@@ -81,6 +82,8 @@ def run_game():
 
                     if turn_done and (pl.x,pl.y)==gm.exit:
                         combat_log.add("YOU FOUND THE DUNGEON EXIT!","bold yellow")
+                        
+                        save_run(player_name,kills,time_survived)
                         show_game_won(layout,kills,time_survived)
                         live.refresh()
                         
@@ -94,6 +97,10 @@ def run_game():
                                 return False
                             elif choice=="r":
                                 return True
+                            elif choice=="l":
+                                show_lb()
+                                live.refresh()
+                                
                                 
                         
             elif key == "q":
@@ -154,6 +161,9 @@ def run_game():
                             choice=msvcrt.getch().decode("utf-8").lower()
                         except UnicodeDecodeError:
                             continue
+                        if choice=="l":
+                            show_lb()
+                            live.refresh()
                         if choice== "q":
                             return False
                         if choice== "r":
@@ -164,12 +174,16 @@ def run_game():
                     "[red] \n YOU DIED [/red] \n [dim] your journey ends here.... [/dim]",border_style="red"))
         console.print(pa,justify="center")
         
-def main():
+def main(player_name):
     while True:
-        restart= run_game()
+        restart= run_game(player_name)
         if not restart:
             break
             
             
 if __name__ == "__main__":
-    main()
+    player_name=input("Enter your username: ")
+    while not player_name:
+        print("Player name cannot be empty")
+        player_name=input("Enter your username: ")
+    main(player_name)

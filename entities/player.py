@@ -20,6 +20,7 @@ class Player:
         self.stam=100
         self.max_stam=100
         
+        
         self.inv={
             "small_hp":1,
             "small_stam":1,

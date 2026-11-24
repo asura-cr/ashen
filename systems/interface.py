@@ -8,6 +8,7 @@ from rich.table import Table
 from rich import box
 
 from systems.hud import display_hud
+from systems.leaderboard import show_lb
 from entities.items import ITEMS
 from entities.player import ATTACKS
 
@@ -111,7 +112,7 @@ def game_over(kills,stime):
         Text(f"Enemies defeated : {kills}",style="yellow",justify="center"),
         Text(f"You survived {stime // 60}m and {stime % 60}s ",style="cyan",justify="center"),
         Text(""),
-        Text(" [R] Restart     [Q] Quit ",style="bold white",justify="center")
+        Text(" [R] Restart     [Q] Quit     [L] Leaderboard ",style="bold white",justify="center")
         )
     return Panel(context,title="GAME OVER",border_style="red",padding=(2,6),width=45)
 
@@ -125,7 +126,7 @@ def game_won(kills,stime):
         Text(f"Enemies defeated : {kills}",style="yellow",justify="center"),
         Text(f"You survived {stime // 60}m and {stime % 60}s ",style="cyan",justify="center"),
         Text(""),
-        Text(" [R] Restart     [Q] Quit ",style="bold white",justify="center")
+        Text(" [R] Restart     [Q] Quit     [L] Leaderboard ",style="bold white",justify="center")
         )
     return Panel(context,title="GAME OVER",border_style="green",padding=(2,6),width=45)
 

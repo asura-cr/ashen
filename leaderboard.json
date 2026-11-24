@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Phoenix",
+        "kills": 3,
+        "time_survived": 106,
+        "date": "2026-11-24"
+    },
+    {
+        "name": "Phoenix",
+        "kills": 2,
+        "time_survived": 38,
+        "date": "2026-11-24"
+    },
+    {
+        "name": "Phoenix",
+        "kills": 1,
+        "time_survived": 46,
+        "date": "2026-11-24"
+    },
+    {
+        "name": "Phoe",
+        "kills": 1,
+        "time_survived": 40,
+        "date": "2026-11-24"
+    },
+    {
+        "name": "Phoenix",
+        "kills": 0,
+        "time_survived": 103,
+        "date": "2026-11-24"
+    },
+    {
+        "name": "Phoenix",
+        "kills": 0,
+        "time_survived": 19,
+        "date": "2026-11-24"
+    },
+    {
+        "name": "Phoenix",
+        "kills": 0,
+        "time_survived": 9,
+        "date": "2026-11-24"
+    }
+]
