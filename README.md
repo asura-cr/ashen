@@ -7,7 +7,8 @@
 ![Interface](https://img.shields.io/badge/Interface-Terminal-222222?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange?style=for-the-badge)
 
-Ashen is a roguelike terminal game made in python.Explore dungeon,defeat monsters and find your way out
+Ashen is a roguelike terminal game made in python.
+Explore dungeon,defeat monsters and find your way out
 
 ## Features
 
@@ -63,4 +64,4 @@ python main.py
 ## Installation
 
 1. Go to [latest releases](https://github.com/asura-cr/releases/latest) and install the .exe
-2. Open .exe
+2. Launch .exe
