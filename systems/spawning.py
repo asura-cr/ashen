@@ -19,6 +19,8 @@ def spawn_enemies(game_map,player,amount):
             continue
         if not game_map.is_walkable(x,y):
             continue
+        if (x,y) == game_map.exit:
+            continue
         if any(e.x==x and e.y==y for e in enemies):
             continue
         enemies.append(Enemy(x,y,k))
@@ -34,7 +36,7 @@ def spawn_chests(gm,occupied):
         spots=[(cx+dx,cy+dy)for dx in range(-2,3) for dy in range(-2,3)]
         random.shuffle(spots)
         for x,y in spots:
-            if gm.is_walkable(x,y) and (x,y) not in occupied:
+            if gm.is_walkable(x,y) and (x,y) not in occupied and (x,y) != gm.exit:
                 chests.append(Chest(x,y))
                 break
     return chests

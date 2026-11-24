@@ -79,10 +79,23 @@ def run_game():
                 else:
                     turn_done=pl.move(dx,dy,gm,en)
 
-                if turn_done and pl.move(dx,dy,gm,en)==gm.exit:
-                    combat_log.add("YOU FOUND THE DUNGEON EXIT!","bold yellow")
-                    show_game_over(layout,kills,time_survived)
-                    live.refresh()
+                    if turn_done and (pl.x,pl.y)==gm.exit:
+                        combat_log.add("YOU FOUND THE DUNGEON EXIT!","bold yellow")
+                        show_game_won(layout,kills,time_survived)
+                        live.refresh()
+                        
+                        while True:
+                            try:
+                                choice=msvcrt.getch().decode("utf-8").lower()
+                            except UnicodeDecodeError:
+                                continue
+                            
+                            if choice=="q":
+                                return False
+                            elif choice=="r":
+                                return True
+                                
+                        
             elif key == "q":
                 return False
             for kind,atk in ATTACKS.items():

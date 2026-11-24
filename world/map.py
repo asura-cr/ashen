@@ -268,7 +268,7 @@ class Gamemap:
             
     
     def is_walkable(self,x,y):
-        return self.get_tile(x,y)=="."
+        return self.get_tile(x,y) in (".","⇥")
             
     def validate(self):
         if not self.rooms:
