@@ -17,8 +17,6 @@ Ashen is a roguelike terminal game made in python.Explore dungeon,defeat monster
  - **Wall Hack**
  - **Leaderboard**
 
- ## Controls
-
 ##  Controls
 
 | Key | Action |
