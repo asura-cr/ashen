@@ -1,6 +1,9 @@
 # ![alt text](image.png)
 
+
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=&pause=1000&color=F70000&center=true&width=435&lines=ASHEN+-+Roguelike+Terminal+Game)](https://git.io/typing-svg)
+
+![alt text](demo.gif)
 
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)
