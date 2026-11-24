@@ -98,7 +98,7 @@ def run_game(player_name):
                             elif choice=="r":
                                 return True
                             elif choice=="l":
-                                show_lb()
+                                show_lb(layout)
                                 live.refresh()
                                 
                                 
@@ -162,7 +162,7 @@ def run_game(player_name):
                         except UnicodeDecodeError:
                             continue
                         if choice=="l":
-                            show_lb()
+                            show_lb(layout)
                             live.refresh()
                         if choice== "q":
                             return False

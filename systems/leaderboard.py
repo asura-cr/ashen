@@ -39,7 +39,7 @@ def save_run(name,kills,time_survived):
         json.dump(lb,f,indent=4)
     return lb
 
-def show_lb():
+def show_lb(layout):
     lb=load_lb()
     
     table=Table(title="ASHEN LEADERBOARD",expand=True)
@@ -57,4 +57,4 @@ def show_lb():
             f"{run['time_survived']}s"
         )
         
-    return Panel(table,border_style="yellow",subtitle=" [R] to Restart  [Q] to Quit")
+    layout["dungeon"].update(Panel(table,border_style="yellow",subtitle=" [R] to Restart  [Q] to Quit"))
