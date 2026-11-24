@@ -37,6 +37,16 @@ Explore dungeon,defeat monsters and find your way out
 | **Small Stamina Potion** | <kbd>O</kbd> | ![+25 Stamina](https://img.shields.io/badge/Stamina-%2B25-2a9d8f?style=flat-square) |
 | **Full Stamina Potion** | <kbd>I</kbd> | ![Max Stamina](https://img.shields.io/badge/Stamina-MAX-00b4d8?style=flat-square) |
 
+## Bestiary
+
+| Icon | Enemy | Stats | Sight | Rarity |
+| :---: | :--- | :--- | :---: | :---: |
+| `●` | **Goblin** | ![HP](https://img.shields.io/badge/HP-10-e63946?style=flat-square) ![DMG](https://img.shields.io/badge/DMG-1-f4a261?style=flat-square) | `6` | ![Common](https://img.shields.io/badge/Common-50%25-6c757d?style=flat-square) |
+| `Z` | **Zombie** | ![HP](https://img.shields.io/badge/HP-15-e63946?style=flat-square) ![DMG](https://img.shields.io/badge/DMG-4-f4a261?style=flat-square) | `5` | ![Uncommon](https://img.shields.io/badge/Uncommon-35%25-2a9d8f?style=flat-square) |
+| `ø` | **Orc** | ![HP](https://img.shields.io/badge/HP-25-e63946?style=flat-square) ![DMG](https://img.shields.io/badge/DMG-5-f4a261?style=flat-square) | `4` | ![Rare](https://img.shields.io/badge/Rare-10%25-00b4d8?style=flat-square) |
+| `Θ` | **Ogre** | ![HP](https://img.shields.io/badge/HP-30-e63946?style=flat-square) ![DMG](https://img.shields.io/badge/DMG-8-f4a261?style=flat-square) | `3` | ![Elite](https://img.shields.io/badge/Elite-5%25-9d4edd?style=flat-square) |
+
+
 ## Building from Source
 
 
@@ -65,3 +75,5 @@ python main.py
 
 1. Go to [latest releases](https://github.com/asura-cr/releases/latest) and install the .exe
 2. Launch .exe
+
+
