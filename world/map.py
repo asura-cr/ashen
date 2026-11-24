@@ -63,10 +63,12 @@ class Gamemap:
     def __init__(self,width,height):
         self.width=width
         self.height=height
+        self.exit= None
         self.rooms=[]
         self.tiles= [[" " for _ in range(width)] for _ in range(height)]
         self.colors=[[None for _ in range(width)]for _ in range(height)]
         self.explored=[[False for _ in range(width)]for _ in range(height)]
+        
 
     def set_tile(self,x,y,tile,color=None):
         if 0 <=x<self.width and 0<=y<self.height:
@@ -352,6 +354,12 @@ class Gamemap:
                 elif tile == ".":
                     if visible:
                         print(FLOOR+ " " + RESET,end="")
+                    else:
+                        print(EXPLORED_FLOOR+" "+RESET,end="")
+                        
+                elif tile == "⇥":
+                    if visible:
+                        print(YELLOW+FLOOR+"⇥"+RESET,end="")
                     else:
                         print(EXPLORED_FLOOR+" "+RESET,end="")
                 else:

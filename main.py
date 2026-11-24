@@ -1,12 +1,13 @@
 import msvcrt
 import time
+import random
 
 from world.map import Gamemap
 from entities.player import Player,ATTACKS
 from systems.spawning import spawn_enemies,spawn_chests
 from systems.interface import create_layout,update_layout
 from systems.combat import Combatlog
-from systems.interface import show_game_over
+from systems.interface import show_game_over,show_game_won
 from entities.items import ITEMS
 
 
@@ -15,6 +16,7 @@ from rich.live import Live
 from rich.panel import Panel
 from rich import print
 from rich.align import Align
+
 
 def run_game():
     start_time=time.monotonic()
@@ -25,7 +27,12 @@ def run_game():
     if not gm.validate():
         print("Map Validation failed")
         return False
+    
+    ex=random.choice(gm.rooms[1:])
+    gm.exit = ex.center()
+    gm.set_tile(*gm.exit,"⇥")
     x,y= gm.rooms[0].center()
+    
     
     pl=Player(x,y)
     en=spawn_enemies(gm,pl,5)
@@ -71,6 +78,11 @@ def run_game():
                     turn_done=True
                 else:
                     turn_done=pl.move(dx,dy,gm,en)
+
+                if turn_done and pl.move(dx,dy,gm,en)==gm.exit:
+                    combat_log.add("YOU FOUND THE DUNGEON EXIT!","bold yellow")
+                    show_game_over(layout,kills,time_survived)
+                    live.refresh()
             elif key == "q":
                 return False
             for kind,atk in ATTACKS.items():

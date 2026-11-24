@@ -1,5 +1,5 @@
 import random
-from entities.player import ITEMS
+from entities.items import ITEMS
 
 class Chest:
     def __init__(self,x,y):

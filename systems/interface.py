@@ -117,3 +117,17 @@ def game_over(kills,stime):
 
 def show_game_over(layout,kills,stime):
     layout["dungeon"].update(Align.center(game_over(kills,stime),vertical="middle"))
+    
+def game_won(kills,stime):
+    context=Group(
+        Text("YOU FOUND THE EXIT",style="bold green",justify="center"),
+        Text("You journey ends here..... ",style="dim",justify="center"),
+        Text(f"Enemies defeated : {kills}",style="yellow",justify="center"),
+        Text(f"You survived {stime // 60}m and {stime % 60}s ",style="cyan",justify="center"),
+        Text(""),
+        Text(" [R] Restart     [Q] Quit ",style="bold white",justify="center")
+        )
+    return Panel(context,title="GAME OVER",border_style="green",padding=(2,6),width=45)
+
+def show_game_won(layout,kills,stime):
+    layout["dungeon"].update(Align.center(game_won(kills,stime),vertical="middle"))
